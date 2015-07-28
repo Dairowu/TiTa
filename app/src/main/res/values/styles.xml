@@ -4,5 +4,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    <style name="MusicStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimaryDark">@color/material_deep_teal_200</item>
+        <item name="colorPrimary">@color/material_deep_teal_500</item>
+
+        
+    </style>
 
 </resources>
