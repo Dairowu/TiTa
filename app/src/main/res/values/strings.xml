@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">TiTa</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+
+    <string name="action_settings">设置</string>
+
+    <!--左边列表的数据-->
+    <string-array name="navlist">
+        <item>音乐</item>
+        <item>发现</item>
+        <item>喜爱</item>
+        <item>关于</item>
+        <item>设置</item>
+    </string-array>
+    <integer-array name="icon">
+        <item>@drawable/music</item>
+        <item>@drawable/found</item>
+        <item>@drawable/btn_info</item>
+        <item>@drawable/setting</item>
+
+    </integer-array>
 </resources>

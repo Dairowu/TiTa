@@ -4,19 +4,43 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.List;
+
+import xietong.tita.Util.GetData;
 
 
 public class TiTa extends AppCompatActivity {
+
+
+    ListView leftNavList;
+
+    //左边导航列表数据
+    String []leftNav;
+    //左边导航栏的图标；
+    int[] id;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ti_ta);
 
+        leftNavList=(ListView)findViewById(R.id.leftNavList);
+        initList(getResources().getStringArray(R.array.navlist),getResources().getIntArray(R.array.icon));
+
+
+
+
         getSupportActionBar().setTitle(null);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
 
     }
 
@@ -41,4 +65,14 @@ public class TiTa extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+//    初始化列表显示
+    private void initList(String[] data,int []id){
+        SimpleAdapter adapter=new SimpleAdapter(this,new GetData().getDate(data,id),
+                R.layout.left_nav,new String[]{"music","icon"},new int[]{R.id.title,R.id.left_icon});
+        leftNavList.setAdapter(adapter);
+
+    }
+
 }
