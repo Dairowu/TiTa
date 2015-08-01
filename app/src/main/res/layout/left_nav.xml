@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--用来定义列表的样式-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/left_nav"
+    android:background="@drawable/item_choose">
 
     <ImageView
+        android:id="@+id/left_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/left_icon"/>
+        />
+
     <TextView
+        android:id="@+id/left_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/left_title"
-        android:text="test"/>
+        android:text="test"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

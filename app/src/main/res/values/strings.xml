@@ -4,6 +4,7 @@
 
     <string name="action_settings">设置</string>
 
+
     <!--左边列表的数据-->
     <string-array name="navlist">
         <item>音乐</item>
@@ -12,11 +13,7 @@
         <item>关于</item>
         <item>设置</item>
     </string-array>
-    <integer-array name="icon">
-        <item>@drawable/music</item>
-        <item>@drawable/found</item>
-        <item>@drawable/btn_info</item>
-        <item>@drawable/setting</item>
+    <!-- 标题-->
+    <string name="title">TiTa</string>
 
-    </integer-array>
 </resources>

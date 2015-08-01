@@ -1,9 +1,14 @@
 package xietong.tita;
 
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -11,17 +16,22 @@ import java.util.List;
 
 import xietong.tita.Util.GetData;
 
+/**
+ * */
+public class TiTa extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-public class TiTa extends AppCompatActivity {
 
+    //    设置标签
+    private static final String TAG = "com.xietong.tita";
+//    左边滑出列表的listview
+    private ListView leftNavList;
 
-    ListView leftNavList;
-
-    //左边导航列表数据
-    String []leftNav;
-    //左边导航栏的图标；
-    int[] id;
-
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+//    private Character DrawerTitle;
+//    private Character mTitle;
+//    记录当前选中的选项，默认为第一个
+    private int id_now=0;
 
 
     @Override
@@ -29,17 +39,17 @@ public class TiTa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ti_ta);
 
-        leftNavList=(ListView)findViewById(R.id.leftNavList);
-        initList(getResources().getStringArray(R.array.navlist),getResources().getIntArray(R.array.icon));
-
-
-
-
-        getSupportActionBar().setTitle(null);
-
+        leftNavList = (ListView) findViewById(R.id.leftNavList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
+//      初始化左边的导航栏
+        initList(getResources().getStringArray(R.array.navlist));
+//        高亮显示第一个选项
+//        leftNavList.getChildAt(id_now).setSelected(true);
+        initDrawer();
+//      getSupportActionBar().setTitle(null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
+        leftNavList.setOnItemClickListener(this);
 
 
     }
@@ -66,13 +76,36 @@ public class TiTa extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-//    初始化列表显示
-    private void initList(String[] data,int []id){
-        SimpleAdapter adapter=new SimpleAdapter(this,new GetData().getDate(data,id),
-                R.layout.left_nav,new String[]{"music","icon"},new int[]{R.id.title,R.id.left_icon});
+    //    初始化列表显示
+    private void initList(String[] data) {
+        SimpleAdapter adapter = new SimpleAdapter(this, new GetData().getDate(data),
+                R.layout.left_nav, new String[]{"music", "icon"}, new int[]{R.id.left_title, R.id.left_icon});
         leftNavList.setAdapter(adapter);
-
     }
 
+    //    初始化滑动监听
+    private void initDrawer() {
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.menu, R.string.title, R.string.title) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+               // invalidateOptionsMenu();
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        mDrawerLayout.setDrawerListener(mToggle);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        leftNavList.getChildAt(id_now).setSelected(false);
+        id_now=position;
+        leftNavList.getChildAt(id_now).setSelected(true);
+        Log.v(TAG,""+id_now+"防止报错");
+    }
 }
