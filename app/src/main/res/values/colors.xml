@@ -10,5 +10,6 @@
     <color name="grey">#FFC0C0C0</color>
     <color name="darkgrey">#FF808080</color>
     <color name="lightgrey">#FFDCDCDC</color>
+    <color name="searchSong">#46adffeb</color>
 
 </resources>

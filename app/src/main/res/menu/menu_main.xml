@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+
+    <item android:id="@+id/toolbar_search"
+          android:title="搜索音乐"
+          android:icon="@drawable/song_search"
+          app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/toolbar_others"
+        android:title="其他设置"
+        android:showAsAction="never"></item>
+</menu>

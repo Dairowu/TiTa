@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_music"
+            android:icon="@drawable/nav_music"
+            android:title="@string/music"/>
+        <item
+            android:id="@+id/nav_find"
+            android:icon="@drawable/found"
+            android:title="@string/find"/>
+        <item
+            android:id="@+id/nav_like"
+            android:icon="@drawable/button_like"
+            android:title="@string/like"/>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/btn_info"
+            android:title="@string/about"/>
+    </group>
+
+    <item android:title="@string/others">
+        <menu>
+            <item
+                android:icon="@drawable/huan_fu"
+                android:id="@+id/nav_background"
+                android:title="@string/changeBackground"/>
+            <item
+                android:icon="@drawable/setting"
+                android:id="@+id/nav_setting"
+                android:title="@string/setting"/>
+        </menu>
+    </item>
+
+</menu>

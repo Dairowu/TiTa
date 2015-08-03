@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+                    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:background="@drawable/bg"-->
+                    <!-->-->
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/Appbar"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            app:contentScrim="#00F5FF"
+            app:expandedTitleMarginStart="95dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/coll_photo"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7"
+                />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#5000F5FF"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="35dp"
+            >
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bnLocalMusic"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:background="#00000000"
+                android:drawableTop="@drawable/local_music"
+                android:text="本地音乐"/>
+
+            <Button
+                android:id="@+id/bnDownLoad"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:layout_alignLeft="@id/bnLocalMusic"
+                android:layout_below="@id/bnLocalMusic"
+                android:background="#00000000"
+                android:drawableTop="@drawable/music_download"
+                android:text="下载列表"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/bnLike"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:layout_alignLeft="@id/bnLocalMusic"
+                android:layout_below="@id/bnDownLoad"
+                android:background="#00000000"
+                android:drawableTop="@drawable/music_like"
+                android:text="我的喜欢"/>
+
+            <Button
+                android:id="@+id/bnList"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:layout_alignLeft="@id/bnDownLoad"
+                android:layout_below="@id/bnLike"
+                android:background="#00000000"
+                android:drawableTop="@drawable/song_list"
+                android:text="我的列表"/>
+        </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/bn_float_user"
+        android:id="@+id/bnFloat"
+        android:clickable="true"
+        android:layout_marginLeft="15dp"
+        app:layout_anchor="@id/Appbar"
+        app:layout_anchorGravity="bottom|start"
+        />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp">
+    <include layout="@layout/bottom_play"/>
+    </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+<!--</RelativeLayout>-->

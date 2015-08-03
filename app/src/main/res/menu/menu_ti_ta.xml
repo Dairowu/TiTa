@@ -11,8 +11,14 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/btn_more"
+        android:icon="@drawable/menu_like_not_select"
         android:orderInCategory="100"
         android:title="more"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/menu_share_tool"
+        android:showAsAction="always"
+        android:title="分享"
+        />
 </menu>

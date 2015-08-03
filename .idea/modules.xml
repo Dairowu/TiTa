@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Tita.iml" filepath="$PROJECT_DIR$/Tita.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cjjTiTa.iml" filepath="$PROJECT_DIR$/cjjTiTa.iml" />
     </modules>
