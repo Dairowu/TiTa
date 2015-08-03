@@ -28,9 +28,20 @@
             android:id="@+id/image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/relativeLayout"></android.support.v4.view.ViewPager>
+            android:layout_above="@+id/relativeLayout"
+            ></android.support.v4.view.ViewPager>
 
         <!--RelativeLayout主要用来显示播放器下面的时间文本和seekbar-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            >
+
+        </TextView>
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
