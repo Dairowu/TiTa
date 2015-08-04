@@ -59,7 +59,7 @@
         android:layout_below="@id/title"
         android:paddingTop="18dp"
         android:paddingBottom="15dp"
-        android:layout_above="@id/textProgressChange"/>
+        android:layout_above="@+id/textProgressChange"/>
 
         <!--&lt;!&ndash;viewpager用来显示歌词和专辑切换列表&ndash;&gt;-->
         <!--<android.support.v4.view.ViewPager-->

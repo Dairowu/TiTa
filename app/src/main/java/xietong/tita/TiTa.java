@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Lrc.LyricProcess;
+import Lrc.LyricView;
+
 /**
  * by LZC
  */
@@ -37,6 +40,10 @@ public class TiTa extends Activity implements View.OnClickListener {
     int songStatus;
     //用来确定当前播放的时间
     int songNow = 0;
+    //自定义显示歌词的view
+    private LyricView lyricView;
+    //用来对歌词文件进行处理
+    private LyricProcess lyricProcess;
 
     ImageButton buttonPlay, buttonNext, buttonLast;
     Button bnLrcBack;
@@ -77,6 +84,9 @@ public class TiTa extends Activity implements View.OnClickListener {
         bnLrcBack = (Button) findViewById(R.id.bnLrcBack);
         textProgressChange = (TextView) findViewById(R.id.textProgressChange);
         spinner_mode = (Spinner) findViewById(R.id.play_mode);
+        lyricView = (LyricView)findViewById(R.id.lrc);
+
+        lyricProcess = new LyricProcess();
 
         //初始化播放时间以及歌曲长度
         textTimeNow.setText("0:00");
