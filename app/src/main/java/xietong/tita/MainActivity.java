@@ -23,6 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import downloadmp3.DownSongListActivity;
+import downloadmp3.DownloadMp3;
+
 /**
  * Created by acer-PC on 2015/8/2.
  */
@@ -125,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //点击下载列表
             case R.id.bnDownLoad:
+                Intent intent = new Intent(MainActivity.this, DownSongListActivity.class);
+                startActivity(intent);
+                msg = "下载";
                 break;
 
             //点击我的喜欢
@@ -221,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String msg = "";
             switch (menuItem.getItemId()) {
                 case R.id.toolbar_search:
+                    Intent intent = new Intent(MainActivity.this, DownloadMp3.class);
+                    startActivity(intent);
                     msg += "点击了搜索歌曲的按钮";
                     break;
                 case R.id.toolbar_others:
