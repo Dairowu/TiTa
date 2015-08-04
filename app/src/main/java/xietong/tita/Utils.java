@@ -105,7 +105,7 @@ public class Utils {
         } else return minute + ":" + second;
     }
 
-    public static void setPlayMode(Context context, int i) {
+    public static void setPlayMode(int i) {
 
         switch (i) {
             case 0:
@@ -165,15 +165,15 @@ public class Utils {
 
         //执行加入歌曲
         while (cursor.moveToNext()) {
-            int indexTitle = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE);
-            int indexArtist = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);
-            int indexAlbum = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM);
-            int indexDuration = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION);
+//            int indexTitle = ;
+//            int indexArtist = ;
+//            int indexAlbum = ;
+//            int indexDuration = ;
 
-            String songTitle = cursor.getString(indexTitle);
-            String songArtist = cursor.getString(indexArtist);
-            String songAlbum = cursor.getString(indexAlbum);
-            String songDuration = cursor.getString(indexDuration);
+            String songTitle = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
+            String songArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
+            String songAlbum = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));
+            String songDuration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
             String songDisplay = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME));
             String songPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA));
             String songSize = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.SIZE));
@@ -197,7 +197,7 @@ public class Utils {
     /**
      *
      * @param whichBn
-     *        判断是谁发出来的操作，包括上下按钮，暂停键，列表点击以及seekBar的拖动
+     *        判断是谁发出来的操作，包括上下按钮，暂停键
      */
     public static void bnSendBroadcast(Context context, int whichBn){
 
@@ -205,22 +205,18 @@ public class Utils {
 
         switch (whichBn){
             //点击上一首
-            case BN_LAST:
+            case BN_LAST:intent.putExtra("buttonChoose", Utils.BN_LAST);
                 break;
-            case BN_NEXT:
+            case BN_NEXT:intent.putExtra("buttonChoose", Utils.BN_NEXT);
                 break;
-            case BN_PLAY:
+            case BN_PLAY:intent.putExtra("buttonChoose", Utils.BN_PLAY);
                 break;
-            case ITEM:
-                break;
-            case BN_PROGRESS:
-                break;
+
         }
         context.sendBroadcast(intent);
     }
 
     public static MyBaseAdapter getAdapter(){
-
         return baseAdapter;
     }
 

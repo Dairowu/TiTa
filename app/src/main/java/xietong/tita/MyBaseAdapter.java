@@ -53,13 +53,11 @@ public class MyBaseAdapter extends BaseAdapter {
         songShow.setText(songLists.get(position).get("songTitle").toString());
         songPath.setText(songLists.get(position).get("songArtist").toString());
 
-
         if (position == selectItem) {
             convertView.setBackgroundColor(Color.argb(80, 0x00, 0xff, 0xff));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
-
 
         return convertView;
     }

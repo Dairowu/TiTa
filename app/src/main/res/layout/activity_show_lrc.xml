@@ -13,6 +13,7 @@
         android:id="@+id/title">
 
         <Button
+            android:id="@+id/bnLrcBack"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="@drawable/left_back"/>
@@ -21,18 +22,20 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/lrcTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textSize="18dp"
-                android:text="歌名"
+
                 />
             <TextView
+                android:id="@+id/lrcArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:textSize="12dp"
-                android:text="歌手"/>
+                />
         </LinearLayout>
         <Button
             android:id="@+id/menu_like"
@@ -61,8 +64,7 @@
         <TextView
             android:id="@+id/textProgressChange"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00"
+            android:layout_height="18dp"
             android:layout_above="@+id/relativeLayout"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
@@ -81,13 +83,12 @@
                 android:id="@+id/textSongTimeNow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00:00"
                 android:textColor="#ffff" />
 
             <SeekBar
                 android:id="@+id/seekBarTime"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/textSongDuration"
                 android:layout_toRightOf="@+id/textSongTimeNow"
@@ -105,7 +106,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:text="05:00"
                 android:textColor="#ffff" />
         </RelativeLayout>
 

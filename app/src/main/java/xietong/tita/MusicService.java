@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
@@ -20,10 +21,17 @@ public class MusicService extends Service{
 
     List<Map<String, Object>> songList = Utils.getList();
     MediaPlayer mediaPlayer;
+    static int lastProgress;
     int currentSong;
-    List<Map<String, Object>> songLists;
     int status = Utils.STOPPING;
     MyServiceReceiver receiver;
+    int songNow;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    //用来显示通知栏的切歌
+    String title;
+    String artist;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,6 +50,7 @@ public class MusicService extends Service{
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
 
+                songNow = 0;
                 currentSong = Utils.getNextSong();
                 Intent intent = new Intent(Utils.ACTION_TO_MAIN);
                 sendBroadcast(intent);
@@ -49,16 +58,48 @@ public class MusicService extends Service{
             }
         });
 
+        new Thread(new MyRunnable()).start();
+
+        Log.e("service", "創建+++++");
         //ע�������������MainActivity����Broadcast
         receiver = new MyServiceReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Utils.ACTION_TO_MUSICSERVICE);
         registerReceiver(receiver, intentFilter);
 
+        //通过SharedPreference来初始化
+        sharedPreferences = getSharedPreferences("music_play", MODE_WORLD_READABLE);
+        editor = sharedPreferences.edit();
+        Utils.setCurrentSong(sharedPreferences.getInt("finalSong", 0));
+        Utils.setPlayMode(sharedPreferences.getInt("playMode", 0));
+        //上次結束時的進度
+        lastProgress = sharedPreferences.getInt("progress", 0);
+
+        //打开应用时提醒在哪首歌
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //显示打开应用时处于哪首歌
+                title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+                artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+                MyNotification.showNotifica(title,artist,null);
+            }
+        }).start();
+
     }
 
     private void prepareAndPlay(int currentSong) {
         mediaPlayer.reset();
+
+        //显示通知栏
+        title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+        artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+        MyNotification.showNotifica(title, artist, null);
         String path = songList.get(currentSong).get("songPath").toString();
         try {
             mediaPlayer.setDataSource(path);
@@ -69,7 +110,7 @@ public class MusicService extends Service{
         }
     }
 
-    //������ͣ������ȸ����¼�
+    //接收点击上下首、播放暂停的按钮，以及拖动条的拖动事件
     public class MyServiceReceiver extends BroadcastReceiver {
 
         @Override
@@ -82,7 +123,8 @@ public class MusicService extends Service{
                 case Utils.BN_PLAY:
                     if (status == Utils.STOPPING) {
                         prepareAndPlay(currentSong);
-                        mediaPlayer.seekTo(progress);
+                        songNow = lastProgress;
+                        mediaPlayer.seekTo(lastProgress);
                         status = Utils.PLAYING;
                     } else if (status == Utils.PLAYING) {
                         mediaPlayer.pause();
@@ -94,6 +136,7 @@ public class MusicService extends Service{
                     break;
 
                 case Utils.BN_LAST:
+                    songNow = 0;
                     currentSong = Utils.getLastSong();
                     prepareAndPlay(currentSong);
                     status = Utils.PLAYING;
@@ -101,6 +144,7 @@ public class MusicService extends Service{
                     break;
 
                 case Utils.BN_NEXT:
+                    songNow = 0;
                     currentSong = Utils.getNextSong();
                     prepareAndPlay(currentSong);
                     status = Utils.PLAYING;
@@ -109,13 +153,15 @@ public class MusicService extends Service{
 
                 case Utils.ITEM:
                     prepareAndPlay(currentSong);
+                    songNow = 0;
                     status = Utils.PLAYING;
                     progress = 0;
+                    Log.e("MUSIC Service","service item");
                     break;
 
                 case Utils.BN_PROGRESS:
                     mediaPlayer.seekTo(progress);
-                    status = Utils.PLAYING;
+                    songNow = progress;
                     break;
                 default:
                     Log.e("Musicservice", "�˴���������");
@@ -127,5 +173,53 @@ public class MusicService extends Service{
             sendBroadcast(intent1);
         }
     }
+
+    //线程执行
+    private class MyRunnable implements Runnable {
+        @Override
+        public void run() {
+            Intent intent1 = new Intent(Utils.ACTION_TO_MAIN);
+            //歌曲时间单位是秒
+            //每0.2秒刷新一次
+            int i = 1;
+            while (true) {
+                //如果歌曲处于暂停状态，则使线程进入睡眠
+                //每0.1秒醒来一次，检查用户是否已经重新开始播放了
+                if (status == Utils.PAUSING||status==Utils.STOPPING) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //如果线程不是处于睡眠状态
+                //0.2秒刷新一次，并且每过一秒就使progress前进一次
+                else {
+                    try {
+
+                        Thread.sleep(200);
+                        if (i == 5) {
+                            songNow+=1000;
+                            Log.e("service線程","後台運行");
+                            intent1.putExtra("freshProgress",songNow);
+                            sendBroadcast(intent1);
+                            i = 0;
+
+                            //這些是為了使sharedPreference能夠保存最新的信息
+                            editor.putInt("finalSong", Utils.getCurrentSong());
+                            editor.putInt("playMode", Utils.play_mode);
+                            editor.putInt("progress", songNow);
+                            editor.commit();
+                        }
+                        i++;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }
+    }
+
 
 }

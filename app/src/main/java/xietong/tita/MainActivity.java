@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,12 +13,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -34,40 +37,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     RelativeLayout mini_relativeLayout;
 
+    //底部按钮的广播事件
+    ListServiceReceiver receiver;
+    //显示底部的歌名显示
+    TextView textArtist,textTitle;
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
-        bndownLoad = (Button) findViewById(R.id.bnDownLoad);
-        bnLike = (Button) findViewById(R.id.bnLike);
-        bnList = (Button) findViewById(R.id.bnList);
-        bnLocal = (Button) findViewById(R.id.bnLocalMusic);
-        bnNext = (ImageButton) findViewById(R.id.local_miniplayer_next);
-        bnLast = (ImageButton) findViewById(R.id.local_miniplayer_last);
-        bnPlay = (ImageButton) findViewById(R.id.local_miniplayer_play);
-
-        mini_relativeLayout = (RelativeLayout) findViewById(R.id.local_miniplayer_layout);
-        mini_relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"跳转",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this,TiTa.class));
-            }
-        });
-
-        bnPlay.setOnClickListener(this);
-        bnNext.setOnClickListener(this);
-        bnLast.setOnClickListener(this);
-        bnLocal.setOnClickListener(this);
-        bnList.setOnClickListener(this);
-        bnLike.setOnClickListener(this);
-        bndownLoad.setOnClickListener(this);
-
-        //加载音乐到list
-        Utils.loadFromSD(MainActivity.this);
+        init();
 
         //设置actionBar
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar)
@@ -94,51 +75,83 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigationView.setNavigationItemSelectedListener(new NavigationListener());
         }
 
+        //初始化广播
+        MyNotification.prepareNotification(MainActivity.this);
+        Log.e("MainActivity","调用OnCreate");
+
+        startService(new Intent(MainActivity.this,MusicService.class));
+    }
+
+    public void init(){
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
+        bndownLoad = (Button) findViewById(R.id.bnDownLoad);
+        bnLike = (Button) findViewById(R.id.bnLike);
+        bnList = (Button) findViewById(R.id.bnList);
+        bnLocal = (Button) findViewById(R.id.bnLocalMusic);
+        bnNext = (ImageButton) findViewById(R.id.local_miniplayer_next);
+        bnLast = (ImageButton) findViewById(R.id.local_miniplayer_last);
+        bnPlay = (ImageButton) findViewById(R.id.local_miniplayer_play);
+        textArtist = (TextView) findViewById(R.id.local_miniplayer_artist);
+        textTitle = (TextView) findViewById(R.id.local_miniplayer_song);
+
+        mini_relativeLayout = (RelativeLayout) findViewById(R.id.local_miniplayer_layout);
+        mini_relativeLayout.setOnClickListener( this);
+
+        bnPlay.setOnClickListener(this);
+        bnNext.setOnClickListener(this);
+        bnLast.setOnClickListener(this);
+        bnLocal.setOnClickListener(this);
+        bnList.setOnClickListener(this);
+        bnLike.setOnClickListener(this);
+        bndownLoad.setOnClickListener(this);
+        //加载音乐到list
+        Utils.loadFromSD(MainActivity.this);
+
+        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, Utils.getList());
+        Utils.setAdapter(baseAdapter);
+
     }
 
     //用来处理按钮的点击事件
     @Override
     public void onClick(View view) {
 
-        String msg = "";
         switch (view.getId()) {
             //点击本地音乐
             case R.id.bnLocalMusic:
                 startActivity(new Intent(MainActivity.this,LocalMusicSongListActivity.class));
-                msg = "本地";
                 break;
 
             //点击下载列表
             case R.id.bnDownLoad:
-                msg = "下载";
                 break;
 
             //点击我的喜欢
             case R.id.bnLike:
-                msg = "喜欢";
                 break;
 
             //点击我的列表
             case R.id.bnList:
-                msg = "列表";
                 break;
 
             case R.id.local_miniplayer_next:
                 Utils.bnSendBroadcast(MainActivity.this,Utils.BN_NEXT);
-                msg += "下一首";
                 break;
 
             case R.id.local_miniplayer_last:
                 Utils.bnSendBroadcast(MainActivity.this,Utils.BN_LAST);
-                msg += "上一首";
                 break;
 
             case R.id.local_miniplayer_play:
                 Utils.bnSendBroadcast(MainActivity.this,Utils.BN_PLAY);
-                msg += "暂停";
+                break;
+
+            case R.id.local_miniplayer_layout:
+                startActivity(new Intent(MainActivity.this,TiTa.class));
                 break;
         }
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+
     }
 
     //处理抽屉item点击事件
@@ -219,106 +232,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    //加载RemoteViews并且设置打开应用时跳出的Notification
-//    private void prepareRemoteViews() {
-//        //初始化remoteView
-//        remoteViews = new RemoteViews(getPackageName(), R.layout.layout_notification);
-//
-//        //注册Action，并为按钮添加监听，发送广播
-//        Intent intentLast = new Intent(Utils.NOTIFICATION_ITEM_BUTTON_LAST);
-//        PendingIntent pendingIntentlast = PendingIntent.getBroadcast(TiTa.this, 0,
-//                intentLast, 0);
-//        remoteViews.setOnClickPendingIntent(R.id.notifyPrevious, pendingIntentlast);
-//
-//        Intent intentNext = new Intent(Utils.NOTIFICATION_ITEM_BUTTON_NEXT);
-//        PendingIntent pendingIntentNext = PendingIntent.getBroadcast(TiTa.this, 0,
-//                intentNext, 0);
-//        remoteViews.setOnClickPendingIntent(R.id.notifyNext, pendingIntentNext);
-//
-//
-//        Intent intentPause = new Intent(Utils.NOTIFICATION_ITEM_BUTTON_PLAY);
-//        PendingIntent pendingIntentPause = PendingIntent.getBroadcast(TiTa.this, 0,
-//                intentPause, 0);
-//        remoteViews.setOnClickPendingIntent(R.id.notifyPlay, pendingIntentPause);
-//
-//        Intent intentActivity = new Intent(TiTa.this, TiTa.class);
-//        PendingIntent pendingIntentActivity = PendingIntent.getActivity(TiTa.this, 0,
-//                intentActivity, 0);
-//        remoteViews.setOnClickPendingIntent(R.id.notifLayout, pendingIntentActivity);
-//
-//        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//
-//        //打开应用时的Notification
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(TiTa.this)
-//                .setSmallIcon(R.drawable.music)
-//                .setContentTitle("")
-//                .setTicker("传递好音乐")
-//                .setContentInfo("");
-//        notificationManager.notify(notifyId, builder.build());
-//
-//        //打开应用时提醒在哪首歌
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                try {
-//                    Thread.sleep(2000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                //显示打开应用时处于哪首歌
-//                showNotifica();
-//            }
-//        }).start();
-//
-//    }
-//
-//    //显示Notification
-//    private void showNotifica() {
-//
-//        remoteViews.setTextViewText(R.id.songName, songLists.get(Utils.getCurrentSong()).get("songTitle").toString());
-//        remoteViews.setTextViewText(R.id.songer, songLists.get(Utils.getCurrentSong()).get("songArtist").toString());
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(TiTa.this)
-//                .setContent(remoteViews)
-//                .setSmallIcon(R.drawable.music)
-//                .setOngoing(true)
-//                .setContentTitle("")
-//                .setTicker(songLists.get(Utils.getCurrentSong()).get("songShow").toString())
-//                .setContentInfo("");
-//
-//        notificationManager.notify(notifyId, builder.build());
-//    }
+    @Override
+    protected void onResume() {
 
+        String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+        String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+        textArtist.setText(artist);
+        textTitle.setText(title);
 
+        //表示从Service接受到的Broadcast将在ServiceReciver处理
+        receiver = new ListServiceReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Utils.ACTION_TO_MAIN);
+        registerReceiver(receiver, intentFilter);
+        super.onResume();
+    }
 
-    //注册Notification广播
-//    notifyReceiver = new NotifyReceiver();//----注册广播
-//    IntentFilter intentNotify = new IntentFilter();
-//    intentNotify.addAction(Utils.NOTIFICATION_ITEM_BUTTON_LAST);
-//    intentNotify.addAction(Utils.NOTIFICATION_ITEM_BUTTON_PLAY);
-//    intentNotify.addAction(Utils.NOTIFICATION_ITEM_BUTTON_NEXT);
-//    registerReceiver(notifyReceiver, intentNotify);
+    @Override
+    protected void onPause() {
+        //注销监听
+        unregisterReceiver(receiver);
+        super.onPause();
+    }
 
-    //处理从Notification传来的广播
-    public class NotifyReceiver extends BroadcastReceiver {
+    //处理从Service传来的广播
+    public class ListServiceReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            Intent intentNotify = new Intent(Utils.ACTION_TO_MUSICSERVICE);
-            String action = intent.getAction();
-            if (action.equals(Utils.NOTIFICATION_ITEM_BUTTON_LAST)) {//----通知栏播放按钮响应事件
-                intentNotify.putExtra("buttonChoose", Utils.BN_LAST);
-
-            } else if (action.equals(Utils.NOTIFICATION_ITEM_BUTTON_PLAY)) {//----通知栏播放按钮响应事件
-                intentNotify.putExtra("buttonChoose", Utils.BN_PLAY);
-            } else if (action.equals(Utils.NOTIFICATION_ITEM_BUTTON_NEXT)) {//----通知栏下一首按钮响应事件
-                intentNotify.putExtra("buttonChoose", Utils.BN_NEXT);
-            }
-            intentNotify.putExtra("progress", 0);
-            context.sendBroadcast(intentNotify);
+            String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+            String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+            textArtist.setText(artist);
+            textTitle.setText(title);
         }
-
     }
+
 }
