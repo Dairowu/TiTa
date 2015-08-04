@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bnDownLoad:
                 Intent intent = new Intent(MainActivity.this, DownSongListActivity.class);
                 startActivity(intent);
-                msg = "下载";
                 break;
 
             //点击我的喜欢
