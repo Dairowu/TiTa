@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/down_song_bg"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#887fff00">
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/icon_back"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:text="清空记录"
+                android:textColor="#ffffff"
+                android:background="@android:color/transparent"/>
+
+        </RelativeLayout>
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TabWidget>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/lv_success"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                ></ListView>
+
+            <ListView
+                android:id="@+id/lv_failure"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                ></ListView>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</TabHost>
