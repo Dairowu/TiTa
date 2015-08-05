@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by acer-PC on 2015/8/3.
  */
-public class MusicService extends Service{
+public class MusicService extends Service {
 
     List<Map<String, Object>> songList = Utils.getList();
     MediaPlayer mediaPlayer;
@@ -72,13 +72,15 @@ public class MusicService extends Service{
         editor = sharedPreferences.edit();
         if (sharedPreferences.getInt("finalSong", 0) >= Utils.getList().size()) {
             Utils.setCurrentSong(0);
+            lastProgress = 0;
         } else {
             Utils.setCurrentSong(sharedPreferences.getInt("finalSong", 0));
+            lastProgress = sharedPreferences.getInt("progress", 0);
         }
-
         Utils.setPlayMode(sharedPreferences.getInt("playMode", 0));
-        //上次結束時的進度
-        lastProgress = sharedPreferences.getInt("progress", 0);
+
+        MyNotification.showNotifica("尊享属于自己的音乐播放器","",null);
+
 
         //打开应用时提醒在哪首歌
         new Thread(new Runnable() {
@@ -92,7 +94,7 @@ public class MusicService extends Service{
                 //显示打开应用时处于哪首歌
                 title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
                 artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
-                MyNotification.showNotifica(title,artist,null);
+                MyNotification.showNotifica(title, artist, null);
             }
         }).start();
 
@@ -122,7 +124,7 @@ public class MusicService extends Service{
         public void onReceive(Context context, Intent intent) {
 
             currentSong = Utils.getCurrentSong();
-            int progress = intent.getIntExtra("progress",0);
+            int progress = intent.getIntExtra("progress", 0);
             int buttonChoose = intent.getIntExtra("buttonChoose", -1);
             switch (buttonChoose) {
                 case Utils.BN_PLAY:
@@ -173,7 +175,7 @@ public class MusicService extends Service{
             }
 
             Intent intent1 = new Intent(Utils.ACTION_TO_MAIN);
-            intent1.putExtra("progress",progress);
+            intent1.putExtra("progress", progress);
             intent1.putExtra("status", status);
             sendBroadcast(intent1);
         }
@@ -190,9 +192,10 @@ public class MusicService extends Service{
             while (true) {
                 //如果歌曲处于暂停状态，则使线程进入睡眠
                 //每0.1秒醒来一次，检查用户是否已经重新开始播放了
-                if (status == Utils.PAUSING||status==Utils.STOPPING) {
+                if (status == Utils.PAUSING || status == Utils.STOPPING) {
                     try {
                         Thread.sleep(100);
+//                        editor.putInt("playMode", Utils.play_mode);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

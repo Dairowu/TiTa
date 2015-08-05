@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Music.iml" filepath="$PROJECT_DIR$/Music.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TiTa.iml" filepath="$PROJECT_DIR$/TiTa.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cjjTiTa.iml" filepath="$PROJECT_DIR$/cjjTiTa.iml" />
       <module fileurl="file://$PROJECT_DIR$/gson-2.2.4/gson-2.2.4.iml" filepath="$PROJECT_DIR$/gson-2.2.4/gson-2.2.4.iml" />
     </modules>
   </component>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#00F5FF"
+        android:id="@+id/title"
+        android:orientation="horizontal"></LinearLayout>
+    <ImageView
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="50dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@mipmap/app_icon"/>
+
+    <Button
+        android:id="@+id/bnUserBack"
+        android:layout_width="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/left_back"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="290dp"
+        android:layout_marginTop="235dp"
+        android:layout_marginLeft="39dp"
+        android:id="@+id/user_layout"
+        android:layout_height="wrap_content" >
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/user_icon"
+            android:textSize="22sp"
+            />
+        </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_height="wrap_content"
+        android:layout_marginTop="310dp"
+        android:layout_marginLeft="39dp"
+
+        android:id="@+id/password_layout"
+        android:layout_width="wrap_content">
+        <EditText
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/user_password"
+            android:textSize="22sp"
+            android:inputType="textPassword"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/bnLog"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="395dp"
+        android:text="登录"
+        android:background="@drawable/bn_user_log"/>
+    <Button
+        android:id="@+id/bnSet"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="198dp"
+        android:layout_marginTop="395dp"
+        android:text="注册"
+        android:background="@drawable/bn_user_set"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

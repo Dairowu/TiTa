@@ -1,10 +1,13 @@
 package downloadmp3;
 
 
+import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,7 @@ import DownLoadUtils.ToastNetState;
 import JsonParse.JsonParse;
 import xietong.tita.MainActivity;
 import xietong.tita.R;
+import xietong.tita.Utils;
 
 /**
  * �下载显示界面。
@@ -48,6 +53,7 @@ public class DownloadMp3 extends ListActivity implements OnClickListener{
 	ToastNetState netState;
 	ListView  listView;
 	DownTask task;
+	RelativeLayout layoutThis;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,7 @@ public class DownloadMp3 extends ListActivity implements OnClickListener{
 		bt_serch = (Button) findViewById(R.id.button_search);
 		bt_back = (Button)findViewById(R.id.button_back);
         editText = (EditText) findViewById(R.id.et_search);
+		layoutThis = (RelativeLayout) findViewById(R.id.layout_search_song);
         tv = (TextView) findViewById(R.id.tv);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         listView = getListView();
@@ -163,5 +170,15 @@ public class DownloadMp3 extends ListActivity implements OnClickListener{
 		intent.putExtra("songId", list.get(position).getSongId());
 		startService(intent);
 	}
-	
+
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	@Override
+	protected void onResume() {
+		//换肤
+		Drawable drawable = Utils.getDrawableBackground(DownloadMp3.this);
+		if (drawable != null) {
+			layoutThis.setBackground(drawable);
+		}
+		super.onResume();
+	}
 }

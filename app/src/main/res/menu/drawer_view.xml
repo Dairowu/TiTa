@@ -8,9 +8,10 @@
             android:icon="@drawable/nav_music"
             android:title="@string/music"/>
         <item
-            android:id="@+id/nav_find"
-            android:icon="@drawable/found"
-            android:title="@string/find"/>
+            android:icon="@drawable/huan_fu"
+            android:id="@+id/nav_background"
+            android:title="@string/changeBackground"/>
+
         <item
             android:id="@+id/nav_like"
             android:icon="@drawable/button_like"
@@ -23,10 +24,11 @@
 
     <item android:title="@string/others">
         <menu>
+
             <item
-                android:icon="@drawable/huan_fu"
-                android:id="@+id/nav_background"
-                android:title="@string/changeBackground"/>
+                android:icon="@drawable/menu_exit"
+                android:id="@+id/nav_exit"
+                android:title="退出"/>
             <item
                 android:icon="@drawable/setting"
                 android:id="@+id/nav_setting"

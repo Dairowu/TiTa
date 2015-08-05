@@ -1,21 +1,27 @@
 package xietong.tita;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,24 +59,21 @@ public class TiTa extends Activity implements View.OnClickListener {
     Button bnLrcBack;
 
     TextView lrcTitle, lrcArtist;
+    //根布局
+    RelativeLayout layoutThis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_lrc);
-
         init();
-
         //启动后台播放音乐的Service
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
-
         //显示当前歌曲的总时长
         textTimeAll.setText(Utils.millsToMinute());
-
         //加载播放模式的Spinner
         loadPlayMode();
-
         spinner_mode.setSelection(Utils.play_mode);
 
     }
@@ -89,6 +92,8 @@ public class TiTa extends Activity implements View.OnClickListener {
         textProgressChange = (TextView) findViewById(R.id.textProgressChange);
         spinner_mode = (Spinner) findViewById(R.id.play_mode);
         lyricView = (LyricView)findViewById(R.id.lrc);
+        //用来修改界面
+        layoutThis = (RelativeLayout) findViewById(R.id.layout_lrc);
 
         String songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
         searchLrc(songPath);
@@ -100,11 +105,17 @@ public class TiTa extends Activity implements View.OnClickListener {
         buttonNext.setOnClickListener(this);
         seekBarTime.setOnSeekBarChangeListener(new seekBarListener());
 
+        //设置歌名可滚动
+        lrcArtist.setMovementMethod(ScrollingMovementMethod.getInstance());
+        lrcTitle.setMovementMethod(ScrollingMovementMethod.getInstance());
+
         //添加监听
         bnLrcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Intent intent = new Intent(TiTa.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
             }
         });
     }
@@ -131,6 +142,8 @@ public class TiTa extends Activity implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Utils.setPlayMode(i);
+                String[] mode = new String[]{"顺序播放","随机播放","单曲循环"};
+                Toast.makeText(TiTa.this,mode[i],Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -267,9 +280,12 @@ public class TiTa extends Activity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Intent intent = new Intent(TiTa.this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onResume() {
 
@@ -286,6 +302,12 @@ public class TiTa extends Activity implements View.OnClickListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Utils.ACTION_TO_MAIN);
         registerReceiver(receiver, intentFilter);
+
+        //执行换肤
+        Drawable drawable = Utils.getDrawableBackground(TiTa.this);
+        if (drawable != null) {
+            layoutThis.setBackground(drawable);
+        }
         super.onResume();
     }
 

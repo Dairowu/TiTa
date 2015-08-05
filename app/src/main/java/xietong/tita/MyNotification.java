@@ -12,10 +12,10 @@ import android.widget.RemoteViews;
 
 /**
  * Created by acer-PC on 2015/8/4.
- *
- *用来处理发送到通知栏的信息
+ * <p>
+ * 用来处理发送到通知栏的信息
  */
-public class MyNotification  {
+public class MyNotification {
 
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
@@ -57,37 +57,33 @@ public class MyNotification  {
         remoteViews.setOnClickPendingIntent(R.id.notifyPlay, pendingIntentPause);
 
         Intent intentActivity = new Intent(context, TiTa.class);
+        /**
+         *
+         */
+        intentActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         PendingIntent pendingIntentActivity = PendingIntent.getActivity(context, 0,
                 intentActivity, 0);
         remoteViews.setOnClickPendingIntent(R.id.notifLayout, pendingIntentActivity);
 
         notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
-        //打开应用时的Notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.app_icon)
-                .setContentTitle("")
-                .setTicker("尊享属于自己的音乐播放器")
-                .setContentInfo("");
-        notificationManager.notify(notifyId, builder.build());
-
     }
 
     //显示Notification
     public static void showNotifica(String songTitle, String songArtist, Bitmap bitmapStar) {
 
-        remoteViews.setTextViewText(R.id.songName,songTitle);
-        remoteViews.setTextViewText(R.id.songer,songArtist);
-        if (bitmapStar!=null){
-        remoteViews.setImageViewBitmap(R.id.imageStar,bitmapStar);}
-
-
+        remoteViews.setTextViewText(R.id.songName, songTitle);
+        remoteViews.setTextViewText(R.id.songer, songArtist);
+        if (bitmapStar != null) {
+            remoteViews.setImageViewBitmap(R.id.imageStar, bitmapStar);
+        }
+       
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContent(remoteViews)
                 .setSmallIcon(R.mipmap.app_icon)
                 .setOngoing(true)
                 .setContentTitle("")
-                .setTicker(songArtist+"-"+songTitle)
+                .setTicker(songArtist + " " + songTitle)
                 .setContentInfo("");
 
         notificationManager.notify(notifyId, builder.build());
@@ -115,8 +111,8 @@ public class MyNotification  {
 
     }
 
-//    public static void unRegist(Context context){
-//        context.unregisterReceiver(notifyReceiver);
-//    }
+    public static void unRegistNotifyReceiver(Context context){
+        context.unregisterReceiver(notifyReceiver);
+    }
 
 }

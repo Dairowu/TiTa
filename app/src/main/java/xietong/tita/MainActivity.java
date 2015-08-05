@@ -11,6 +11,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +38,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button bnLocal, bndownLoad, bnLike, bnList;
 
     //定义底部切歌的处理
-    ImageButton bnNext,bnPlay,bnLast;
+    ImageButton bnNext, bnPlay, bnLast;
 
     RelativeLayout mini_relativeLayout;
 
     //底部按钮的广播事件
     ListServiceReceiver receiver;
     //显示底部的歌名显示
-    TextView textArtist,textTitle;
+    TextView textArtist, textTitle;
+
+    NestedScrollView nestedScrollView;
+    LinearLayout layoutThis;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -78,14 +83,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigationView.setNavigationItemSelectedListener(new NavigationListener());
         }
 
+        //开启service
+        startService(new Intent(MainActivity.this, MusicService.class));
+
+        //修改显示
+        String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+        String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+        textArtist.setText(artist);
+        textTitle.setText(title);
+
         //初始化广播
         MyNotification.prepareNotification(MainActivity.this);
-        Log.e("MainActivity","调用OnCreate");
+//        MyNotification.rePreareNotify(MainActivity.this);
+        Log.e("MainActivity", "调用OnCreate");
 
-        startService(new Intent(MainActivity.this,MusicService.class));
+        //打开应用时提醒在哪首歌
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //显示打开应用时处于哪首歌
+                String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+                String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+                MyNotification.showNotifica(title, artist, null);
+            }
+        }).start();
+
     }
 
-    public void init(){
+    public void init() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         bndownLoad = (Button) findViewById(R.id.bnDownLoad);
@@ -98,8 +128,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textArtist = (TextView) findViewById(R.id.local_miniplayer_artist);
         textTitle = (TextView) findViewById(R.id.local_miniplayer_song);
 
+        nestedScrollView = (NestedScrollView) findViewById(R.id.scrollView);
+
         mini_relativeLayout = (RelativeLayout) findViewById(R.id.local_miniplayer_layout);
-        mini_relativeLayout.setOnClickListener( this);
+        mini_relativeLayout.setOnClickListener(this);
 
         bnPlay.setOnClickListener(this);
         bnNext.setOnClickListener(this);
@@ -114,6 +146,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, Utils.getList());
         Utils.setAdapter(baseAdapter);
 
+        //表示从Service接受到的Broadcast将在ServiceReciver处理
+        receiver = new ListServiceReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Utils.ACTION_TO_MAIN);
+        registerReceiver(receiver, intentFilter);
+
     }
 
     //用来处理按钮的点击事件
@@ -123,12 +161,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             //点击本地音乐
             case R.id.bnLocalMusic:
-                startActivity(new Intent(MainActivity.this,LocalMusicSongListActivity.class));
+                Intent intentToList = new Intent(MainActivity.this, LocalMusicSongListActivity.class);
+                intentToList.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intentToList);
                 break;
 
             //点击下载列表
             case R.id.bnDownLoad:
                 Intent intent = new Intent(MainActivity.this, DownSongListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 break;
 
@@ -141,19 +182,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.local_miniplayer_next:
-                Utils.bnSendBroadcast(MainActivity.this,Utils.BN_NEXT);
+                Utils.bnSendBroadcast(MainActivity.this, Utils.BN_NEXT);
                 break;
 
             case R.id.local_miniplayer_last:
-                Utils.bnSendBroadcast(MainActivity.this,Utils.BN_LAST);
+                Utils.bnSendBroadcast(MainActivity.this, Utils.BN_LAST);
                 break;
 
             case R.id.local_miniplayer_play:
-                Utils.bnSendBroadcast(MainActivity.this,Utils.BN_PLAY);
+                Utils.bnSendBroadcast(MainActivity.this, Utils.BN_PLAY);
                 break;
 
             case R.id.local_miniplayer_layout:
-                startActivity(new Intent(MainActivity.this,TiTa.class));
+                Intent intentToLrc = new Intent(MainActivity.this, TiTa.class);
+                intentToLrc.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intentToLrc);
                 break;
         }
 
@@ -172,8 +215,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
 
                 //点击发现
-                case R.id.nav_find:
-                    msg += "发现";
+                case R.id.nav_exit:
+                    msg += "退出";
                     break;
 
                 //点击喜欢
@@ -188,6 +231,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //点击换肤
                 case R.id.nav_background:
+                    Intent intentToBackground = new Intent(MainActivity.this, ChangeBackgroungActivity.class);
+                    intentToBackground.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intentToBackground);
                     msg += "换肤";
                     break;
 
@@ -239,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onResume() {
 
@@ -247,19 +294,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textArtist.setText(artist);
         textTitle.setText(title);
 
-        //表示从Service接受到的Broadcast将在ServiceReciver处理
-        receiver = new ListServiceReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Utils.ACTION_TO_MAIN);
-        registerReceiver(receiver, intentFilter);
+//        Drawable drawable = Utils.getDrawableBackground(MainActivity.this);
+//        if (drawable != null) {
+////            layoutThis.setBackground(drawable);
+////            nestedScrollView.setBackground(drawable);
+//            Log.e("MainActivity", "换肤成功");
+//        }
+//        Log.e("MainActivity", (drawable==null)+"");
         super.onResume();
+
     }
 
     @Override
-    protected void onPause() {
-        //注销监听
+    protected void onDestroy() {
+        //注销广播
         unregisterReceiver(receiver);
-        super.onPause();
+        MyNotification.unRegistNotifyReceiver(MainActivity.this);
+        Log.e("onDestroy", "destroying");
+        super.onDestroy();
+    }
+
+
+    //需要监听返回按钮，默认返回时会销毁Activity，但是并不需要销毁Activity
+    @Override
+    public void onBackPressed() {
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        startActivity(home);
     }
 
     //处理从Service传来的广播
@@ -272,6 +334,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             textArtist.setText(artist);
             textTitle.setText(title);
         }
+    }
+
+    //处理悬浮按钮的点击事件
+    public void FloatBnUser(View view) {
+
+        Intent intent = new Intent(MainActivity.this, UserLogActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 
 }

@@ -80,7 +80,9 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 break;
 
             case R.id.local_miniplayer_layout:
-                startActivity(new Intent(LocalMusicSongListActivity.this, TiTa.class));
+                Intent intent = new Intent(LocalMusicSongListActivity.this,TiTa.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
                 break;
         }
     }
@@ -128,6 +130,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Utils.ACTION_TO_MAIN);
         registerReceiver(receiver, intentFilter);
+
         super.onResume();
     }
 

@@ -2,9 +2,13 @@ package xietong.tita;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,10 +169,6 @@ public class Utils {
 
         //执行加入歌曲
         while (cursor.moveToNext()) {
-//            int indexTitle = ;
-//            int indexArtist = ;
-//            int indexAlbum = ;
-//            int indexDuration = ;
 
             String songTitle = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
             String songArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
@@ -222,6 +222,22 @@ public class Utils {
 
     public static void setAdapter(MyBaseAdapter adapter){
         baseAdapter = adapter;
+    }
+
+    public static Drawable getDrawableBackground(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("music_play", context.MODE_WORLD_READABLE);
+        String background = sharedPreferences.getString("background", null);
+        if (background != null) {
+            Uri uri = Uri.parse(background);
+            Drawable drawable = null;
+            try {
+                drawable = Drawable.createFromStream(context.getContentResolver().openInputStream(uri),null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            return drawable;
+        }
+        return null;
     }
 
 }

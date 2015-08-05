@@ -11,5 +11,9 @@
     <color name="darkgrey">#FF808080</color>
     <color name="lightgrey">#FFDCDCDC</color>
     <color name="searchSong">#46adffeb</color>
+    <color name="bn_user_log_pressed">#50ff50ba</color>
+    <color name="bn_user_log_notpress">#506cffe2</color>
+    <color name="bn_user_set_press">#504bcc3f</color>
+    <color name="bn_user_set_notpress">#50ff4ed8</color>
 
 </resources>
