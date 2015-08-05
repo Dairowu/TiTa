@@ -40,6 +40,10 @@ public class TiTa extends Activity implements View.OnClickListener {
     int songStatus;
     //用来确定当前播放的时间
     int songNow = 0;
+    //歌曲路径
+    String songPath;
+    //歌词路径
+    String lrcPath;
     //自定义显示歌词的view
     private LyricView lyricView;
     //用来对歌词文件进行处理
@@ -87,6 +91,8 @@ public class TiTa extends Activity implements View.OnClickListener {
         lyricView = (LyricView)findViewById(R.id.lrc);
 
         lyricProcess = new LyricProcess();
+        songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
+        lrcPath = lrcPath.substring(0,songPath.length()-4).trim() + ".lrc".trim();
 
         //初始化播放时间以及歌曲长度
         textTimeNow.setText("0:00");
