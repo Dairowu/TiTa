@@ -70,7 +70,12 @@ public class MusicService extends Service{
         //通过SharedPreference来初始化
         sharedPreferences = getSharedPreferences("music_play", MODE_WORLD_READABLE);
         editor = sharedPreferences.edit();
-        Utils.setCurrentSong(sharedPreferences.getInt("finalSong", 0));
+        if (sharedPreferences.getInt("finalSong", 0) >= Utils.getList().size()) {
+            Utils.setCurrentSong(0);
+        } else {
+            Utils.setCurrentSong(sharedPreferences.getInt("finalSong", 0));
+        }
+
         Utils.setPlayMode(sharedPreferences.getInt("playMode", 0));
         //上次結束時的進度
         lastProgress = sharedPreferences.getInt("progress", 0);
@@ -80,7 +85,7 @@ public class MusicService extends Service{
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(2500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -197,20 +202,20 @@ public class MusicService extends Service{
                 else {
                     try {
 
-                        Thread.sleep(200);
-                        if (i == 5) {
-                            songNow+=1000;
+                        Thread.sleep(480);
+//                        if (i == 5) {
+                            songNow+=480;
                             Log.e("service線程","後台運行");
                             intent1.putExtra("freshProgress",songNow);
                             sendBroadcast(intent1);
-                            i = 0;
+//                            i = 0;
 
                             //這些是為了使sharedPreference能夠保存最新的信息
                             editor.putInt("finalSong", Utils.getCurrentSong());
                             editor.putInt("playMode", Utils.play_mode);
                             editor.putInt("progress", songNow);
                             editor.commit();
-                        }
+//                        }
                         i++;
                     } catch (InterruptedException e) {
                         e.printStackTrace();

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Lrc.LyricObject;
 import Lrc.LyricProcess;
 import Lrc.LyricView;
 
@@ -40,14 +42,12 @@ public class TiTa extends Activity implements View.OnClickListener {
     int songStatus;
     //用来确定当前播放的时间
     int songNow = 0;
-    //歌曲路径
-    String songPath;
-    //歌词路径
-    String lrcPath;
     //自定义显示歌词的view
     private LyricView lyricView;
     //用来对歌词文件进行处理
-    private LyricProcess lyricProcess;
+    private LyricProcess lyricProcess = new LyricProcess();
+    //泡泡窗弹出后供用户选择下载图片和歌词
+    private PopupWindow popupWindow = null;
 
     ImageButton buttonPlay, buttonNext, buttonLast;
     Button bnLrcBack;
@@ -90,9 +90,8 @@ public class TiTa extends Activity implements View.OnClickListener {
         spinner_mode = (Spinner) findViewById(R.id.play_mode);
         lyricView = (LyricView)findViewById(R.id.lrc);
 
-        lyricProcess = new LyricProcess();
-        songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
-        lrcPath = lrcPath.substring(0,songPath.length()-4).trim() + ".lrc".trim();
+        String songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
+        searchLrc(songPath);
 
         //初始化播放时间以及歌曲长度
         textTimeNow.setText("0:00");
@@ -153,10 +152,12 @@ public class TiTa extends Activity implements View.OnClickListener {
 
             case R.id.buttonLast:
                 intent.putExtra("buttonChoose", Utils.BN_LAST);
+                lyricView.invalidate();
                 break;
 
             case R.id.buttonNext:
                 intent.putExtra("buttonChoose", Utils.BN_NEXT);
+                lyricView.invalidate();
                 break;
         }
         intent.putExtra("progress", seekBarTime.getProgress());
@@ -206,11 +207,18 @@ public class TiTa extends Activity implements View.OnClickListener {
                 //修改標題欄的信息
                 String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
                 String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+                //获取新的路径
+                String songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
+                searchLrc(songPath);
                 lrcArtist.setText(artist);
                 lrcTitle.setText(title);
 
             } else {
                 Log.e("過來的消息",""+freshProgress);
+                Log.i("info","freshProgress"+freshProgress);
+                Log.i("info","index"+lyricProcess.selectIndex(freshProgress));
+                lyricView.setIndex(lyricProcess.selectIndex(freshProgress));
+                lyricView.invalidate();
                 seekBarTime.setProgress(freshProgress);
             }
         }
@@ -219,7 +227,7 @@ public class TiTa extends Activity implements View.OnClickListener {
     //seekBar事件处理
     private class seekBarListener implements SeekBar.OnSeekBarChangeListener {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             //添加判断是因为在点击下一首时会触发这个事件
             // 当选择切歌时，会使这个为0
@@ -228,10 +236,10 @@ public class TiTa extends Activity implements View.OnClickListener {
             }
             //如果是由拖动seekBar引起的
             else if (Utils.isTouchSeekBar) {
-                textProgressChange.setText(Utils.progressToShow(i));
+                textProgressChange.setText(Utils.progressToShow(progress));
             }
 
-            textTimeNow.setText(Utils.progressToShow(i));
+            textTimeNow.setText(Utils.progressToShow(progress));
         }
 
         @Override
@@ -286,4 +294,19 @@ public class TiTa extends Activity implements View.OnClickListener {
         unregisterReceiver(receiver);
         super.onPause();
     }
+
+    /**
+     * 将歌曲文件读取进来并进行处理
+     */
+    public void searchLrc(String songPath){
+        //歌词路径
+        String lrcPath = songPath;
+        lrcPath = lrcPath.substring(0,songPath.length()-4).trim() +  ".lrc";
+        lyricProcess.readLRC(lrcPath);
+        lyricView.setBlLrc(lyricProcess.getBlLrc());
+        List<LyricObject> list = lyricProcess.getLrcList();
+        Log.i("info","length"+list.size());
+        lyricView.setlrc_list(list);
+    }
+
 }

@@ -78,7 +78,9 @@ public class MyNotification  {
 
         remoteViews.setTextViewText(R.id.songName,songTitle);
         remoteViews.setTextViewText(R.id.songer,songArtist);
-        remoteViews.setImageViewBitmap(R.id.imageStar,bitmapStar);
+        if (bitmapStar!=null){
+        remoteViews.setImageViewBitmap(R.id.imageStar,bitmapStar);}
+
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContent(remoteViews)

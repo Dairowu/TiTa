@@ -15,8 +15,8 @@ public class LyricView extends View{
 	private static List<LyricObject> lrc_list;
 	private static boolean blLrc = false;
 	private int INTERVAL=12;
-	private int CURRENTtEXTSIZE = 24;
-	private int TEXTSIZE=18;
+	private int CURRENTEXTSIZE = 24;
+	private int TEXTSIZE=20;
 	private int index;
 	private int offsetY;
 	private int width;
@@ -42,7 +42,7 @@ public class LyricView extends View{
 		paint.setColor(Color.GRAY);
 		paint.setAntiAlias(true);//设置抗锯齿
 		paint.setDither(true);//设置防止抖动
-		paint.setTextSize(18);
+		paint.setTextSize(20);
 		paint.setAlpha(180);
 
 		paintHL = new Paint();
@@ -64,21 +64,24 @@ public class LyricView extends View{
 			canvas.drawText(temp.lrcline, width/2, tempY , paintHL);
 
 			//画出当前歌词之前的歌词
-			for(int i = index -1;i> index - 5;i--){
+			for(int i = index -1;i> index - 5&&i>0;i--){
 				temp = lrc_list.get(i);
-				if(tempY-(TEXTSIZE+INTERVAL)*i<0){
-					break;
+				if(tempY<0){
+					continue;
 				}
-				canvas.drawText(temp.lrcline, width/2, tempY-(TEXTSIZE+INTERVAL)*i, paint);
+				tempY = tempY - (TEXTSIZE+INTERVAL);
+				canvas.drawText(temp.lrcline, width/2, tempY, paint);
 			}
 
+			tempY = height/2;
 			//画出当前歌词之后的歌词
-			for(int i = index +1;i<index+5;i++){
+			for(int i = index +1;i<index+5&&i<lrc_list.size();i++){
 				temp = lrc_list.get(i);
-				if(tempY+(TEXTSIZE+INTERVAL)*i>height){
-					break;
+				if(tempY>height){
+					continue;
 				}
-				canvas.drawText(temp.lrcline, width/2, tempY+(TEXTSIZE+INTERVAL)*i, paint);
+				tempY = tempY + (TEXTSIZE+INTERVAL);
+				canvas.drawText(temp.lrcline, width/2, tempY, paint);
 			}
 
 		}else{
@@ -116,7 +119,8 @@ public class LyricView extends View{
 		height = h;
 	}
 
-	public void setindex(int index){
+	public void setIndex(int index){
 		this.index = index;
 	}
+	public void setBlLrc(boolean blLrc){this.blLrc = blLrc;}
 }

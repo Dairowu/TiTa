@@ -1,5 +1,8 @@
 package Lrc;
 
+
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,12 +15,20 @@ import java.util.List;
 public class LyricProcess {
 
 	private List<LyricObject> lrcList = new ArrayList<LyricObject>();
-	private LyricObject lyricObject;
-
+	private LyricObject lyricObject = new LyricObject();
+	//用来判断该路径下是否是文件
+	private boolean blLrc = false;
+	//歌词高亮显示的下标
+	private int lrcIndex;
 	public void readLRC(String path){
-		File f = new File(path.replace(".mp3", ".lrc"));
 
 		try {
+			File f = new File(path);
+			if(!f.isFile()){
+				blLrc=false;
+				return;
+			}
+			blLrc = true;
 			//创建一个文件输入流对象
 			FileInputStream fis = new FileInputStream(f);
 			InputStreamReader isr = new InputStreamReader(fis, "utf-8");
@@ -30,17 +41,23 @@ public class LyricProcess {
 
 				//分离“@”字符
 				String splitLrcData[] = s.split("@");
+
 				if(splitLrcData.length > 1) {
 					lyricObject.lrcline=splitLrcData[1];
-
 					//处理歌词取得歌曲的时间
 					int lrcTime = time2Str(splitLrcData[0]);
-
 					lyricObject.begintime = lrcTime;
-
 					//添加进列表数组
 					lrcList.add(lyricObject);
-
+					//新创建歌词内容对象
+					lyricObject = new LyricObject();
+				}else {
+					lyricObject.lrcline="";
+					//处理歌词取得歌曲的时间
+					int lrcTime = time2Str(splitLrcData[0]);
+					lyricObject.begintime = lrcTime;
+					//添加进列表数组
+					lrcList.add(lyricObject);
 					//新创建歌词内容对象
 					lyricObject = new LyricObject();
 				}
@@ -50,7 +67,7 @@ public class LyricProcess {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		Log.i("info", "length" + lrcList.size());
 		LyricObject oldval  = null;
 		for(int i = 0;i<lrcList.size();i++){
 			LyricObject val = lrcList.get(i);
@@ -58,15 +75,13 @@ public class LyricProcess {
 				oldval=val;
 			}
 			else{
-				LyricObject item1= new LyricObject();
-				item1  = oldval;
-				item1.timeline = val.begintime-oldval.begintime;
-				lrcList.add(item1);
-				i++;
+				int timeline ;
+				timeline = val.begintime-oldval.begintime;
+				oldval.timeline = timeline;
 				oldval = val;
 			}
 		}
-
+		Log.i("info", "length" + lrcList.size());
 	}
 
 	public int time2Str(String timeStr) {
@@ -85,9 +100,29 @@ public class LyricProcess {
 		return currentTime;
 	}
 
+	public int selectIndex(int time){
+		if(!blLrc){
+			return 0;
+		}
+		int index = 0;
+		for (int i = 0;i<lrcList.size();i++){
+			LyricObject temp = lrcList.get(i);
+			if(temp.begintime<time&&(temp.timeline+temp.begintime)>time){
+				index=i;
+				break;
+			}
+		}
+
+		if(index<0){
+			return 0;
+		}
+		return index;
+	}
+
 	public List<LyricObject> getLrcList() {
 		return lrcList;
 	}
 
+	public boolean getBlLrc(){return blLrc;}
 }
 
