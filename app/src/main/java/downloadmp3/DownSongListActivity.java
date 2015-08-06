@@ -12,6 +12,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TabHost;
 
 import SQLite.DatabaseHelper;
+import xietong.tita.FinishApp;
 import xietong.tita.R;
 import xietong.tita.Utils;
 
@@ -26,6 +27,7 @@ public class DownSongListActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.down_song_list);
+        FinishApp.addActivity(this);
 
         lv_success = (ListView)findViewById(R.id.lv_success);
         lv_failure = (ListView)findViewById(R.id.lv_failure);

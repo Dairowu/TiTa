@@ -115,4 +115,8 @@ public class MyNotification {
         context.unregisterReceiver(notifyReceiver);
     }
 
+    public static void finishNotify(){
+        notificationManager.cancel(notifyId);
+    }
+
 }

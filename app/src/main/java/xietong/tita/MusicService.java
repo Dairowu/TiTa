@@ -32,6 +32,7 @@ public class MusicService extends Service {
     //用来显示通知栏的切歌
     String title;
     String artist;
+    boolean isFinish = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -123,6 +124,15 @@ public class MusicService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            boolean b = intent.getBooleanExtra("finish",false);
+            if (b){
+                Log.e("musicService","停止运行");
+                unregisterReceiver(receiver);
+                mediaPlayer.stop();
+                stopSelf();
+            }
+            isFinish = b;
+
             currentSong = Utils.getCurrentSong();
             int progress = intent.getIntExtra("progress", 0);
             int buttonChoose = intent.getIntExtra("buttonChoose", -1);
@@ -189,7 +199,7 @@ public class MusicService extends Service {
             //歌曲时间单位是秒
             //每0.2秒刷新一次
             int i = 1;
-            while (true) {
+            while (!isFinish) {
                 //如果歌曲处于暂停状态，则使线程进入睡眠
                 //每0.1秒醒来一次，检查用户是否已经重新开始播放了
                 if (status == Utils.PAUSING || status == Utils.STOPPING) {
@@ -228,6 +238,5 @@ public class MusicService extends Service {
             }
         }
     }
-
 
 }

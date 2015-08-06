@@ -30,6 +30,7 @@ import Dao.Song;
 import DownLoadUtils.HttpFileDownloader;
 import DownLoadUtils.ToastNetState;
 import JsonParse.JsonParse;
+import xietong.tita.FinishApp;
 import xietong.tita.MainActivity;
 import xietong.tita.R;
 import xietong.tita.Utils;
@@ -59,6 +60,7 @@ public class DownloadMp3 extends ListActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_down_load_mp3);
+		FinishApp.addActivity(this);
 
 		bt_serch = (Button) findViewById(R.id.button_search);
 		bt_back = (Button)findViewById(R.id.button_back);

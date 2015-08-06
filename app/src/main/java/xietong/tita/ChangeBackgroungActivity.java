@@ -35,6 +35,7 @@ public class ChangeBackgroungActivity extends Activity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_background);
+        FinishApp.addActivity(ChangeBackgroungActivity.this);
 
         bnBack = (Button) findViewById(R.id.bnBackgroundBack);
         bnDefault = (Button) findViewById(R.id.bnBackgroundDefault);

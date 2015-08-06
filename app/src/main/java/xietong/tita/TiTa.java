@@ -66,10 +66,12 @@ public class TiTa extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_lrc);
+        FinishApp.addActivity(TiTa.this);
+
         init();
-        //启动后台播放音乐的Service
-        Intent intent = new Intent(this, MusicService.class);
-        startService(intent);
+//        //启动后台播放音乐的Service
+//        Intent intent = new Intent(this, MusicService.class);
+//        startService(intent);
         //显示当前歌曲的总时长
         textTimeAll.setText(Utils.millsToMinute());
         //加载播放模式的Spinner

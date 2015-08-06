@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FinishApp.addActivity(this);
 
         init();
 
@@ -214,8 +215,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     msg += "音乐";
                     break;
 
-                //点击发现
+                //点击退出
                 case R.id.nav_exit:
+                    FinishApp.finishAllActivity(MainActivity.this);
                     msg += "退出";
                     break;
 
@@ -226,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //点击关于
                 case R.id.nav_about:
+                    Intent intentToInfo = new Intent(MainActivity.this,AppInfoActivity.class);
+                    intentToInfo.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intentToInfo);
                     msg += "关于";
                     break;
 
@@ -294,15 +299,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textArtist.setText(artist);
         textTitle.setText(title);
 
-//        Drawable drawable = Utils.getDrawableBackground(MainActivity.this);
-//        if (drawable != null) {
-////            layoutThis.setBackground(drawable);
-////            nestedScrollView.setBackground(drawable);
-//            Log.e("MainActivity", "换肤成功");
-//        }
-//        Log.e("MainActivity", (drawable==null)+"");
         super.onResume();
 
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(receiver);
+        Log.e("MainActivity","onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.e("MainA","onRestart");
+        receiver = new ListServiceReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Utils.ACTION_TO_MAIN);
+        registerReceiver(receiver, intentFilter);
+        super.onRestart();
     }
 
     @Override

@@ -39,6 +39,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.local_music);
+        FinishApp.addActivity(this);
 
         bnNext = (ImageButton) findViewById(R.id.local_miniplayer_next);
         bnLast = (ImageButton) findViewById(R.id.local_miniplayer_last);

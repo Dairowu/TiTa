@@ -26,6 +26,7 @@ public class UserLogActivity extends Activity implements TextWatcher {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_log);
+        FinishApp.addActivity(this);
 
         userLayout = (TextInputLayout) findViewById(R.id.user_layout);
         passwordLayout = (TextInputLayout) findViewById(R.id.password_layout);
