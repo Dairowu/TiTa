@@ -29,6 +29,7 @@
                 android:id="@+id/songName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="这是歌名"
                 android:textSize="15sp"/>
 
@@ -37,6 +38,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="这是歌手"
+                android:textColor="@color/lightgrey"
                 android:textSize="13sp"/>
         </LinearLayout>
 
@@ -50,19 +52,21 @@
                 android:id="@+id/notifyPrevious"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/previous_normal"/>
+                android:background="@drawable/bn_bottom_last"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/notifyPlay"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/pause_normal"/>
+                android:background="#00ff"
+                />
+            <!--android:background="@drawable/bn_bottom_pause"-->
 
             <Button
                 android:id="@+id/notifyNext"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/next_normal"/>
+                android:background="@drawable/bn_bottom_next"/>
         </LinearLayout>
     </LinearLayout>
 

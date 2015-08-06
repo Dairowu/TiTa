@@ -48,6 +48,7 @@ public class Utils {
     public final static int STOPPING = 0x15;//一开始进入应用时处于的状态
     public final static int PAUSING = 0x16;
     public final static int PLAYING = 0x20;
+    public static int status = STOPPING;
 
     //判断是否是由拖动seekBar引起
     public static boolean isTouchSeekBar = false;
@@ -192,6 +193,7 @@ public class Utils {
             song.put("songShow", songShow);
             songList.add(song);
         }
+        cursor.close();
     }
 
     /**
@@ -238,6 +240,14 @@ public class Utils {
             return drawable;
         }
         return null;
+    }
+
+    public static int getStatus(){
+        return status;
+    }
+
+    public static void setStatus(int status1){
+        status = status1;
     }
 
 }

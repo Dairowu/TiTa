@@ -7,12 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 /**
  * Created by acer-PC on 2015/8/4.
- * <p>
+ * <p/>
  * 用来处理发送到通知栏的信息
  */
 public class MyNotification {
@@ -22,6 +23,8 @@ public class MyNotification {
     private static int notifyId = 0;
     static Context context;
     static NotifyReceiver notifyReceiver;
+    static String title,artist;
+    static Bitmap bitmap;
 
     //加载RemoteViews并且设置打开应用时跳出的Notification
     public static void prepareNotification(Context fromContext) {
@@ -77,7 +80,7 @@ public class MyNotification {
         if (bitmapStar != null) {
             remoteViews.setImageViewBitmap(R.id.imageStar, bitmapStar);
         }
-       
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContent(remoteViews)
                 .setSmallIcon(R.mipmap.app_icon)
@@ -87,6 +90,34 @@ public class MyNotification {
                 .setContentInfo("");
 
         notificationManager.notify(notifyId, builder.build());
+        title= songTitle;
+        artist = songArtist;
+        bitmap = bitmapStar;
+    }
+
+    //修改播放按钮的显示
+    public static void showNotifyButton(){
+        remoteViews.setTextViewText(R.id.songName, title);
+        remoteViews.setTextViewText(R.id.songer, artist);
+        if (bitmap != null) {
+            remoteViews.setImageViewBitmap(R.id.imageStar, bitmap);
+        }
+
+        if (Utils.getStatus() != Utils.PLAYING ) {
+            remoteViews.setImageViewBitmap(R.id.notifyPlay, BitmapFactory.decodeResource(context.getResources(), R.drawable.bn_pause));
+        } else {
+            remoteViews.setImageViewBitmap(R.id.notifyPlay, BitmapFactory.decodeResource(context.getResources(), R.drawable.bn_play));
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setContent(remoteViews)
+                .setSmallIcon(R.mipmap.app_icon)
+                .setOngoing(true)
+                .setContentTitle("")
+//                .setTicker(artist + " " + title)
+                .setContentInfo("");
+
+        notificationManager.notify(notifyId, builder.build());
+
     }
 
     //处理从Notification传来的广播
@@ -111,11 +142,11 @@ public class MyNotification {
 
     }
 
-    public static void unRegistNotifyReceiver(Context context){
+    public static void unRegistNotifyReceiver(Context context) {
         context.unregisterReceiver(notifyReceiver);
     }
 
-    public static void finishNotify(){
+    public static void finishNotify() {
         notificationManager.cancel(notifyId);
     }
 

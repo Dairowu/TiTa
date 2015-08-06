@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
                 String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
                 MyNotification.showNotifica(title, artist, null);
+
+                MyNotification.showNotifyButton();
             }
         }).start();
 
@@ -141,8 +143,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bnList.setOnClickListener(this);
         bnLike.setOnClickListener(this);
         bndownLoad.setOnClickListener(this);
-        //加载音乐到list
-        Utils.loadFromSD(MainActivity.this);
 
         MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, Utils.getList());
         Utils.setAdapter(baseAdapter);
@@ -191,6 +191,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.local_miniplayer_play:
+                //修改播放按钮的显示
+                if (Utils.getStatus()!=Utils.PLAYING){
+                    bnPlay.setSelected(true);
+                }
+                else {
+                    bnPlay.setSelected(false);
+                }
                 Utils.bnSendBroadcast(MainActivity.this, Utils.BN_PLAY);
                 break;
 
@@ -298,7 +305,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
         textArtist.setText(artist);
         textTitle.setText(title);
+        drawerLayout.closeDrawers();
 
+        if (Utils.getStatus()!=Utils.PLAYING){
+            bnPlay.setSelected(false);
+        }
+        else {
+            bnPlay.setSelected(true);
+        }
         super.onResume();
 
     }
@@ -323,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         //注销广播
-        unregisterReceiver(receiver);
+//        unregisterReceiver(receiver);
         MyNotification.unRegistNotifyReceiver(MainActivity.this);
         Log.e("onDestroy", "destroying");
         super.onDestroy();
@@ -348,6 +362,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
             textArtist.setText(artist);
             textTitle.setText(title);
+            //修改播放按钮的显示
+            if (Utils.getStatus()!=Utils.PLAYING){
+                bnPlay.setSelected(false);
+            }
+            else {
+                bnPlay.setSelected(true);
+            }
         }
     }
 

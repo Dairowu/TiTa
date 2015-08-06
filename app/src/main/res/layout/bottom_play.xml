@@ -22,28 +22,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/local_miniplayer_next"
-
-            android:layout_alignParentTop="true"
-
             android:layout_alignRight="@+id/local_miniplayer_next"
-            android:layout_marginEnd="41dp"
-            android:layout_marginRight="41dp"
+            android:layout_marginRight="34dp"
+            android:layout_marginTop="10dp"
             android:background="@null"
-            android:padding="15dp"
-            android:src="@drawable/pause_normal" />
+            android:src="@drawable/bn_bottom_pause"/>
+
+            <!--android:src="@drawable/pause_normal" />-->
 
         <ImageButton
             android:id="@+id/local_miniplayer_last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-
             android:layout_alignRight="@+id/local_miniplayer_play"
-
-            android:layout_marginRight="48dp"
+            android:layout_marginRight="38dp"
+            android:layout_marginTop="10dp"
             android:background="@null"
-            android:padding="15dp"
-            android:src="@mipmap/player_last" />
+            android:src="@drawable/bn_bottom_last" />
 
         <!--Left="@+id/local_miniplayer_bg_play"
                     android:layout_toLeftOf="@id/local_miniplayer_play"
@@ -55,17 +50,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="10dp"
             android:background="@null"
-            android:padding="8dp"
-            android:src="@mipmap/player_next" />
+            android:src="@drawable/bn_bottom_next" />
 
         <TextView
             android:id="@+id/local_miniplayer_song"
             android:layout_width="190sp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/local_miniplayer_album"
             android:singleLine="true"
             android:text="换地方会扩散到将恢复快捷"
@@ -80,6 +75,7 @@
             android:layout_below="@id/local_miniplayer_song"
             android:layout_toRightOf="@id/local_miniplayer_album"
             android:singleLine="true"
+            android:layout_marginBottom="4dp"
             android:text="@string/artist_default"
             android:textColor="@color/lightgrey"
             android:textSize="12sp" />

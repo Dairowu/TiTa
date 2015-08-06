@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false"
+        android:drawable="@drawable/bn_bottom_next_normal"/>
+    <item android:drawable="@drawable/bn_bottom_next_press"
+        android:state_pressed="true"/>
+
+</selector>

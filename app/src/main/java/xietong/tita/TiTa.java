@@ -162,6 +162,13 @@ public class TiTa extends Activity implements View.OnClickListener {
         Intent intent = new Intent(Utils.ACTION_TO_MUSICSERVICE);
         switch (view.getId()) {
             case R.id.buttonPlay:
+                //修改播放按钮的显示
+                if (Utils.getStatus()!=Utils.PLAYING){
+                    buttonPlay.setSelected(true);
+                }
+                else {
+                    buttonPlay.setSelected(false);
+                }
                 intent.putExtra("buttonChoose", Utils.BN_PLAY);
                 break;
 
@@ -227,6 +234,14 @@ public class TiTa extends Activity implements View.OnClickListener {
                 searchLrc(songPath);
                 lrcArtist.setText(artist);
                 lrcTitle.setText(title);
+
+                //修改播放按钮的显示
+                if (Utils.getStatus()!=Utils.PLAYING){
+                    buttonPlay.setSelected(false);
+                }
+                else {
+                    buttonPlay.setSelected(true);
+                }
 
             } else {
                 Log.e("過來的消息",""+freshProgress);
@@ -310,6 +325,15 @@ public class TiTa extends Activity implements View.OnClickListener {
         if (drawable != null) {
             layoutThis.setBackground(drawable);
         }
+
+        //修改播放按钮的显示
+        if (Utils.getStatus()!=Utils.PLAYING){
+            buttonPlay.setSelected(false);
+        }
+        else {
+            buttonPlay.setSelected(true);
+        }
+
         super.onResume();
     }
 

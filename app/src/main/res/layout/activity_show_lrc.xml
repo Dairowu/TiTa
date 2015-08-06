@@ -26,7 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="18dp"
+                android:textSize="19sp"
+                android:textColor="@color/white"
                 android:scrollbars="horizontal"
                 android:singleLine="true"
 
@@ -35,8 +36,9 @@
                 android:id="@+id/lrcArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:textSize="12dp"
+                android:layout_marginTop="2dp"
+                android:textSize="14sp"
+                android:textColor="@color/lightgrey"
                 android:scrollbars="horizontal"
                 android:singleLine="true"
                 />
@@ -64,14 +66,6 @@
         android:paddingTop="18dp"
         android:paddingBottom="16dp"
         android:layout_above="@+id/textProgressChange"/>
-
-        <!--&lt;!&ndash;viewpager用来显示歌词和专辑切换列表&ndash;&gt;-->
-        <!--<android.support.v4.view.ViewPager-->
-            <!--android:id="@+id/image_view"-->
-            <!--android:layout_below="@id/title"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_above="@+id/relativeLayout"></android.support.v4.view.ViewPager>-->
 
         <!--RelativeLayout主要用来显示播放器下面的时间文本和seekbar-->
         <TextView
@@ -149,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00ffbd7e"
-                android:src="@drawable/previous_normal" />
+                android:src="@drawable/bn_bottom_last" />
 
             <ImageButton
                 android:id="@+id/buttonPlay"
@@ -157,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00ffbd7e"
-                android:src="@drawable/pause_normal" />
+                android:src="@drawable/bn_bottom_pause" />
 
             <ImageButton
                 android:id="@+id/buttonNext"
@@ -165,12 +159,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00ffbd7e"
-                android:src="@drawable/next_normal" />
+                android:src="@drawable/bn_bottom_next" />
 
             <ImageButton
                 android:id="@+id/bnSongList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
                 android:background="#00ffbd7e"
                 android:src="@drawable/btn_list" />
         </LinearLayout>

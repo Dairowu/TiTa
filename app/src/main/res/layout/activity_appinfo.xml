@@ -43,7 +43,7 @@
         android:text="制作成员"
         android:textSize="22sp"
         android:layout_marginLeft="14dp"
-        android:layout_marginTop="293dp"/>
+        android:layout_marginTop="292dp"/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="2dp"
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:paddingRight="15dp"
         android:background="#00ff"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="281dp"
         android:drawableRight="@drawable/bn_info"/>
     <TextView
         android:layout_width="fill_parent"

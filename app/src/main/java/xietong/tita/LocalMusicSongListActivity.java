@@ -77,6 +77,13 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 break;
 
             case R.id.local_miniplayer_play:
+                //修改播放按钮的显示
+                if (Utils.getStatus()!=Utils.PLAYING){
+                    bnPlay.setSelected(true);
+                }
+                else {
+                    bnPlay.setSelected(false);
+                }
                 Utils.bnSendBroadcast(LocalMusicSongListActivity.this, Utils.BN_PLAY);
                 break;
 
@@ -125,6 +132,13 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
         textArtist.setText(artist);
         textTitle.setText(title);
+        //修改按钮显示
+        if (Utils.getStatus()!=Utils.PLAYING){
+            bnPlay.setSelected(false);
+        }
+        else {
+            bnPlay.setSelected(true);
+        }
 
         //表示从Service接受到的Broadcast将在ServiceReciver处理
         receiver = new ListServiceReceiver();
@@ -151,6 +165,13 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
             String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
             textArtist.setText(artist);
             textTitle.setText(title);
+            //修改播放按钮的显示
+            if (Utils.getStatus()!=Utils.PLAYING){
+                bnPlay.setSelected(false);
+            }
+            else {
+                bnPlay.setSelected(true);
+            }
         }
     }
 }
