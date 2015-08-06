@@ -99,7 +99,7 @@ public class MusicService extends Service {
         String path = songList.get(currentSong).get("songPath").toString();
         try {
             mediaPlayer.setDataSource(path);
-            mediaPlayer.prepare();
+            mediaPlayer.prepareAsync();
             mediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();
