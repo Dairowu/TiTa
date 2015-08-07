@@ -38,7 +38,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.local_music);
+        setContentView(R.layout.activity_local_music);
         FinishApp.addActivity(this);
 
         bnNext = (ImageButton) findViewById(R.id.local_miniplayer_next);
@@ -119,8 +119,6 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 sendBroadcast(intent);
                 Log.e("TiTa", "列表項點擊" + i);
             }
-            Utils.getAdapter().setSelectItem(i);
-
         }
 
 
@@ -154,6 +152,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         intentFilter.addAction(Utils.ACTION_TO_MAIN);
         registerReceiver(receiver, intentFilter);
 
+        Utils.getAdapter().setSelectItem(Utils.getCurrentSong());
         super.onResume();
     }
 
@@ -180,6 +179,14 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
             else {
                 bnPlay.setSelected(true);
             }
+            Utils.getAdapter().setSelectItem(Utils.getCurrentSong());
         }
     }
+
+    public void floatClick(View view){
+        if (Utils.getCurrentSong() < 5||Utils.getCurrentSong()>songLists.size()-4)
+            localListView.setSelection(Utils.getCurrentSong());
+        else localListView.setSelection(Utils.getCurrentSong()-4);
+    }
+
 }
