@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigationView.setNavigationItemSelectedListener(new NavigationListener());
         }
 
+        //开启service
+        startService(new Intent(MainActivity.this, MusicService.class));
+
         //初始化广播
         MyNotification.prepareNotification(MainActivity.this);
 //        MyNotification.rePreareNotify(MainActivity.this);
@@ -93,14 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //开启service
         startService(new Intent(MainActivity.this, MusicService.class));
-
-        if (Utils.getCurrentSong() >= 0 && Utils.getCurrentSong() < Utils.getList().size()) {        //修改显示
-            String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
-            String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
-            textArtist.setText(artist);
-            textTitle.setText(title);
-        }
-
         //打开应用时提醒在哪首歌
         new Thread(new Runnable() {
             @Override
@@ -118,6 +113,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 MyNotification.showNotifyButton();
             }
         }).start();
+
+        String artist = null;
+        String title = null;
+        //修改显示
+        if (Utils.getCurrentSong()>=Utils.getList().size()){
+            artist = Utils.getList().get(0).get("songArtist").toString();
+            title = Utils.getList().get(0).get("songTitle").toString();
+        }
+        else{
+            artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+            title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+        }
+        textArtist.setText(artist);
+        textTitle.setText(title);
 
     }
 
@@ -224,18 +233,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (menuItem.getItemId()) {
                 //点击音乐按钮
                 case R.id.nav_music:
-                    msg += "音乐";
                     break;
 
                 //点击退出
                 case R.id.nav_exit:
                     FinishApp.finishAllActivity(MainActivity.this);
-                    msg += "退出";
                     break;
 
                 //点击喜欢
                 case R.id.nav_like:
-                    msg += "喜欢";
                     break;
 
                 //点击关于
@@ -243,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intentToInfo = new Intent(MainActivity.this, AppInfoActivity.class);
                     intentToInfo.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intentToInfo);
-                    msg += "关于";
                     break;
 
                 //点击换肤
@@ -251,7 +256,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intentToBackground = new Intent(MainActivity.this, ChangeBackgroungActivity.class);
                     intentToBackground.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intentToBackground);
-                    msg += "换肤";
                     break;
 
                 //点击设置
@@ -259,10 +263,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intentToSetting = new Intent(MainActivity.this,ActivitySetting.class);
                     intentToSetting.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intentToSetting);
-                    msg += "设置";
                     break;
+
             }
-            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
             //关闭抽屉
             drawerLayout.closeDrawers();
             return true;
@@ -326,25 +329,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStop() {
-        unregisterReceiver(receiver);
-        Log.e("MainActivity", "onStop");
+//        unregisterReceiver(receiver);
+        Log.e("MainActivity","onStop");
         super.onStop();
     }
 
     @Override
     protected void onRestart() {
-        Log.e("MainA", "onRestart");
-        receiver = new ListServiceReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Utils.ACTION_TO_MAIN);
-        registerReceiver(receiver, intentFilter);
+        Log.e("MainA","onRestart");
+//        receiver = new ListServiceReceiver();
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(Utils.ACTION_TO_MAIN);
+//        registerReceiver(receiver, intentFilter);
         super.onRestart();
     }
 
     @Override
     protected void onDestroy() {
         //注销广播
-//        unregisterReceiver(receiver);
+        unregisterReceiver(receiver);
         MyNotification.unRegistNotifyReceiver(MainActivity.this);
         Log.e("onDestroy", "destroying");
         super.onDestroy();

@@ -112,9 +112,9 @@ public class MusicService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            boolean b = intent.getBooleanExtra("finish",false);
-            if (b){
-                Log.e("musicService","停止运行");
+            boolean b = intent.getBooleanExtra("finish", false);
+            if (b) {
+                Log.e("musicService", "停止运行");
                 unregisterReceiver(receiver);
                 mediaPlayer.stop();
                 stopSelf();
@@ -172,7 +172,9 @@ public class MusicService extends Service {
             Utils.setStatus(status);
             sendBroadcast(intent1);
 
-            MyNotification.showNotifyButton();
+            //得加上判断，否则退出程序后，通知栏刚消失又会出现
+            if (!b)
+                MyNotification.showNotifyButton();
         }
     }
 
@@ -201,8 +203,7 @@ public class MusicService extends Service {
                         Thread.sleep(220);
                         //当切歌的时候不是处于播放状态，此时不能发送广播
                         if (mediaPlayer.isPlaying()) {
-                            Log.e("service線程","後台運行");
-                            intent1.putExtra("freshProgress",mediaPlayer.getCurrentPosition());
+                            intent1.putExtra("freshProgress", mediaPlayer.getCurrentPosition());
                             sendBroadcast(intent1);
 
                             //這些是為了使sharedPreference能夠保存最新的信息
