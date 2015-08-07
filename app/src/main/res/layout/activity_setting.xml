@@ -40,4 +40,26 @@
         android:background="#30ff"
         android:layout_marginTop="118dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="138dp"
+        android:layout_marginLeft="9dp"
+        android:text="锁屏显示"
+        android:textSize="24sp"/>
+    <Switch
+        android:id="@+id/switchLock"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:textOff="关"
+        android:textOn="开"
+        android:checked="true"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="260dp"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#30ff"
+        android:layout_marginTop="183dp"/>
+
 </FrameLayout>

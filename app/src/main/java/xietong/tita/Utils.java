@@ -20,6 +20,7 @@ import java.util.Random;
  */
 public class Utils {
 
+    public static final String TAG = "Tita";
     private static List<Map<String, Object>> songList = new ArrayList<Map<String, Object>>();
 
     //当前是第几首歌
@@ -60,6 +61,8 @@ public class Utils {
             = "com.example.notification.NotifyReceiver.play";//----通知栏播放按钮
     public final static String NOTIFICATION_ITEM_BUTTON_NEXT
             = "com.example.notification.NotifyReceiver.next";//----通知栏下一首按钮
+
+    List<Map<String,MyBaseAdapter>> list = new ArrayList<Map<String, MyBaseAdapter>>();
 
     //返回歌单
     public static List<Map<String, Object>> getList() {
@@ -171,6 +174,7 @@ public class Utils {
         //执行加入歌曲
         while (cursor.moveToNext()) {
 
+
             String songTitle = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
             String songArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
             String songAlbum = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));
@@ -184,7 +188,6 @@ public class Utils {
             if(songDisplay!=null) {
                 songShow = songDisplay.substring(0, songDisplay.indexOf("."));
             };
-
             Map<String, Object> song = new HashMap<String, Object>();
             song.put("songTitle", songTitle);
             song.put("songArtist", songArtist);

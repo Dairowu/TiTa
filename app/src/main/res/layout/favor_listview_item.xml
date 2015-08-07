@@ -12,7 +12,7 @@
         android:gravity="center_vertical" >
 
         <ImageView
-            android:id="@+id/music_listitem_indicator"
+            android:id="@+id/favor_listitem_indicator"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
@@ -57,7 +57,7 @@
             android:singleLine="true" />
 
         <CheckBox
-            android:id="@+id/music_listitem_action"
+            android:id="@+id/favor_listitem_action"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
@@ -72,26 +72,26 @@
     <!-- popdown默认设置gone -->
 
     <LinearLayout
-        android:id="@+id/local_popdown"
+        android:id="@+id/favor_popdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="visible" >
 
-        <Button
-            android:id="@+id/popdown_favor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/sel_popdown_item"
-            android:drawableTop="@mipmap/popdown_unlike"
-            android:paddingTop="5dp"
-            android:text="@string/myfavor"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+        <!--<Button-->
+            <!--android:id="@+id/popdown_favor"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/sel_popdown_item"-->
+            <!--android:drawableTop="@mipmap/popdown_unlike"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:text="@string/myfavor"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="12sp" />-->
 
         <Button
-            android:id="@+id/popdown_detail"
+            android:id="@+id/favor_popdown_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -102,20 +102,10 @@
             android:textColor="@color/white"
             android:textSize="12sp" />
 
-        <!--<Button-->
-        <!--android:id="@+id/local_popdown_ringtone"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/sel_popdown_item"-->
-        <!--android:drawableTop="@drawable/popdown_ringtone"-->
-        <!--android:paddingTop="5dp"-->
-        <!--android:text="@string/ringtone"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="12sp" />-->
+
 
         <Button
-            android:id="@+id/popdown_del"
+            android:id="@+id/favor_popdown_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

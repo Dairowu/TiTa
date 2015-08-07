@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/textLockTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="13dp"
+        android:textSize="23sp"
+        android:textColor="@color/white"
+        android:scrollbars="horizontal"
+        android:text="夜曲"
+        android:singleLine="true"
+
+        />
+    <TextView
+        android:id="@+id/textLockArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="13dp"
+        android:textSize="18sp"
+        android:text="周杰伦"
+        android:textColor="@color/lightgrey"
+        android:scrollbars="horizontal"
+        android:singleLine="true"
+        />
+
+    <ImageButton
+        android:id="@+id/bnLockLast"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="#00ffbd7e"
+        android:layout_marginTop="465dp"
+        android:layout_marginLeft="55dp"
+        android:src="@drawable/bn_bottom_last" />
+
+    <ImageButton
+        android:id="@+id/bnLockPlay"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="465dp"
+        android:layout_marginLeft="145dp"
+        android:background="#00ffbd7e"
+        android:src="@drawable/bn_bottom_pause" />
+
+    <ImageButton
+        android:id="@+id/bnLockNext"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="465dp"
+        android:background="#00ffbd7e"
+        android:src="@drawable/bn_bottom_next" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="553dp"
+        android:layout_marginLeft="135dp"
+        android:text="滑动解锁"
+        android:textSize="24sp"/>
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="556dp"
+        android:layout_marginLeft="245dp"
+        android:background="@drawable/lock_right"/>
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="556dp"
+        android:layout_marginLeft="263dp"
+        android:background="@drawable/lock_right"/>
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="556dp"
+        android:layout_marginLeft="281dp"
+        android:background="@drawable/lock_right"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -29,7 +29,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
     ListServiceReceiver receiver;
 
     //定义底部切歌的处理
-    ImageButton bnNext, bnPlay, bnLast;
+    ImageButton bnNext, bnPlay, bnLast,bnBack;
 
     TextView textArtist,textTitle;
 
@@ -38,17 +38,19 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.local_music);
+        setContentView(R.layout.activity_local_music);
         FinishApp.addActivity(this);
 
         bnNext = (ImageButton) findViewById(R.id.local_miniplayer_next);
         bnLast = (ImageButton) findViewById(R.id.local_miniplayer_last);
         bnPlay = (ImageButton) findViewById(R.id.local_miniplayer_play);
+        bnBack = (ImageButton) findViewById(R.id.local_actionbar_back);
         textArtist = (TextView) findViewById(R.id.local_miniplayer_artist);
         textTitle = (TextView) findViewById(R.id.local_miniplayer_song);
         bnPlay.setOnClickListener(this);
         bnNext.setOnClickListener(this);
         bnLast.setOnClickListener(this);
+        bnBack.setOnClickListener(this);
 
         mini_relativeLayout = (RelativeLayout) findViewById(R.id.local_miniplayer_layout);
         mini_relativeLayout.setOnClickListener(this);
@@ -92,6 +94,11 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 break;
+            case R.id.local_actionbar_back:
+                Intent intent1 = new Intent(LocalMusicSongListActivity.this, MainActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent1);
+                break;
         }
     }
 
@@ -112,7 +119,6 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 sendBroadcast(intent);
                 Log.e("TiTa", "列表項點擊" + i);
             }
-
         }
 
 
@@ -146,6 +152,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         intentFilter.addAction(Utils.ACTION_TO_MAIN);
         registerReceiver(receiver, intentFilter);
 
+        Utils.getAdapter().setSelectItem(Utils.getCurrentSong());
         super.onResume();
     }
 
@@ -172,6 +179,14 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
             else {
                 bnPlay.setSelected(true);
             }
+            Utils.getAdapter().setSelectItem(Utils.getCurrentSong());
         }
     }
+
+    public void floatClick(View view){
+        if (Utils.getCurrentSong() < 5||Utils.getCurrentSong()>songLists.size()-4)
+            localListView.setSelection(Utils.getCurrentSong());
+        else localListView.setSelection(Utils.getCurrentSong()-4);
+    }
+
 }

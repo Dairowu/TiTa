@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,14 @@ public class FinishApp extends Application {
                 activity.finish();
         }
         MyNotification.finishNotify();
+        Log.e("FinishApp", "发送消息");
         Intent intent = new Intent(Utils.ACTION_TO_MUSICSERVICE);
         intent.putExtra("finish", true);
         context.sendBroadcast(intent);
+
+//        Intent intentoLock = new Intent(Intent.ACTION_SCREEN_OFF);
+//        intentoLock.putExtra("finish",true);
+//        context.sendBroadcast(intentoLock);
     }
 
     @Override

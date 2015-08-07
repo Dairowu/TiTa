@@ -11,6 +11,7 @@ import android.os.Bundle;
 /**
  * Created by acer-PC on 2015/8/6.
  * 登录时只显示一张图片
+ *
  */
 public class ActivityStart extends Activity {
     @Override
@@ -40,9 +41,12 @@ public class ActivityStart extends Activity {
                 try {
                     //加载音乐到list
                     Utils.loadFromSD(ActivityStart.this);
+
                     Intent intent = new Intent(ActivityStart.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
                     startService(new Intent(ActivityStart.this, LockService.class));
+
                     Thread.sleep(1400);
                     startActivity(intent);
                 } catch (InterruptedException e) {

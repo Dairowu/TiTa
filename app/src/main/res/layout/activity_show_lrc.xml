@@ -53,9 +53,9 @@
         <Button
             android:id="@+id/bn_lrc_share"
             android:layout_marginLeft="8dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/menu_share_tool"/>
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/lrc_share"/>
     </LinearLayout>
 
     <Lrc.LyricView
