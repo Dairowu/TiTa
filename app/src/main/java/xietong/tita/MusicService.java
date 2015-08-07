@@ -86,7 +86,6 @@ public class MusicService extends Service {
         Utils.setPlayMode(sharedPreferences.getInt("playMode", 0));
 
         MyNotification.showNotifica("尊享属于自己的音乐播放器", "", null);
-
     }
 
     private void prepareAndPlay(int currentSong) {

@@ -4,13 +4,29 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.PopupWindow;
 
 import java.util.List;
 
-public class LyricView extends View{
+import DownLoadUtils.DownPictureOrLrc;
+import xietong.tita.R;
+
+public class LyricView extends View implements View.OnClickListener{
+
+	DownPictureOrLrc downPictureOrLrc;
+	Handler handler;
+	String title;
+	//用来标示是下载图片还是歌词
+	int DOWNLRC  = 1;
+	int DOWNPICTURE = 2;
 
 	private static List<LyricObject> lrc_list;
 	private static boolean blLrc = false;
@@ -23,6 +39,7 @@ public class LyricView extends View{
 	private int height;
 	private Paint paint;
 	private Paint paintHL;
+	private Context context;
 
 	public void setlrc_list(List<LyricObject> lrc_list){
 		this.lrc_list = lrc_list;
@@ -30,6 +47,7 @@ public class LyricView extends View{
 
 	public LyricView(Context context,AttributeSet attrs){
 		super(context,attrs);
+		this.context = context;
 		init();
 	}
 
@@ -39,7 +57,7 @@ public class LyricView extends View{
 
 		paint = new Paint();
 		paint.setTextAlign(Paint.Align.CENTER);//设置绘制文本时的对齐方式
-		paint.setColor(Color.GRAY);
+		paint.setColor(Color.argb(0,250,250,250));
 		paint.setAntiAlias(true);//设置抗锯齿
 		paint.setDither(true);//设置防止抖动
 		paint.setTextSize(20);
@@ -91,26 +109,26 @@ public class LyricView extends View{
 		super.onDraw(canvas);
 	}
 
-	public boolean onTouchEvent(MotionEvent event){
-
-		if(!blLrc){
-			return super.onTouchEvent(event);
-		}
-		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-
-				break;
-			case MotionEvent.ACTION_UP:
-
-				break;
-			case MotionEvent.ACTION_MOVE:
-
-				break;
-			default:
-				break;
-		}
-		return true;
-	}
+//	public boolean onTouchEvent(MotionEvent event){
+//
+//		if(!blLrc){
+//			return super.onTouchEvent(event);
+//		}
+//		switch (event.getAction()) {
+//			case MotionEvent.ACTION_DOWN:
+//
+//				break;
+//			case MotionEvent.ACTION_UP:
+//
+//				break;
+//			case MotionEvent.ACTION_MOVE:
+//
+//				break;
+//			default:
+//				break;
+//		}
+//		return true;
+//	}
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -123,4 +141,41 @@ public class LyricView extends View{
 		this.index = index;
 	}
 	public void setBlLrc(boolean blLrc){this.blLrc = blLrc;}
+	public void setHandler(Handler handler){this.handler = handler;}
+	public void setTile(String title){this.title = title;}
+
+	@Override
+	public void onClick(View v) {
+		//为泡泡窗口加载视图
+		PopupWindow popupWindow;
+		LayoutInflater inflater = LayoutInflater.from(context);
+		View root = inflater.inflate(R.layout.popupwindow, null);
+		popupWindow = new PopupWindow(root, WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT,true );
+		popupWindow.setAnimationStyle(R.style.popupanimation);
+		popupWindow.setFocusable(true);
+		popupWindow.setBackgroundDrawable(new BitmapDrawable());
+		popupWindow.showAtLocation(root, Gravity.BOTTOM,0,0);
+
+		Button bt_downpicture = (Button) root.findViewById(R.id.bt_downpicture);
+		bt_downpicture.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				downPictureOrLrc = new DownPictureOrLrc(DOWNPICTURE,context,title,handler);
+				Thread downPicture = new Thread(downPictureOrLrc);
+				downPicture.start();
+			}
+		});
+
+		Button bt_downlrc = (Button) root.findViewById(R.id.bt_downlrc);
+		bt_downlrc.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				downPictureOrLrc = new DownPictureOrLrc(DOWNLRC,context,title,handler);
+				Thread downPicture = new Thread(downPictureOrLrc);
+				downPicture.start();
+			}
+		});
+
+		Button bt_huanfu = (Button) root.findViewById(R.id.bt_huanfu);
+	}
 }

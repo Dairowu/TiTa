@@ -21,9 +21,9 @@ public class ActivityStart extends Activity {
 
         //如果换肤的结果是为空的话
         String string = getSharedPreferences("music_play", MODE_WORLD_READABLE)
-                .getString("background", null);
+                .getString("background", "");
         SharedPreferences.Editor editor = getSharedPreferences("music_play", MODE_WORLD_READABLE).edit();
-        if (string.equals(null)) {
+        if (string.equals("")) {
             Resources r = getResources();
             Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
                     + r.getResourcePackageName(R.drawable.bg) + "/"

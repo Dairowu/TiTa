@@ -180,7 +180,10 @@ public class Utils {
             String songSize = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.SIZE));
 
             //用来显示在列表界面的歌曲名称
-            String songShow = songDisplay.substring(0, songDisplay.indexOf("."));
+            String songShow = "";
+            if(songDisplay!=null) {
+                songShow = songDisplay.substring(0, songDisplay.indexOf("."));
+            };
 
             Map<String, Object> song = new HashMap<String, Object>();
             song.put("songTitle", songTitle);
