@@ -423,8 +423,11 @@ public class TiTa extends Activity implements View.OnClickListener {
             String picturePath = path +File.separator+ title +  ".jpg";
             processPicture.readPciture(picturePath);
             bitmap = processPicture.getBitmap();
-            Drawable drawable = new BitmapDrawable(bitmap);
-           return drawable;
+            if(bitmap!=null) {
+                Drawable drawable = new BitmapDrawable(bitmap);
+                return drawable;
+            }
+        return null;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

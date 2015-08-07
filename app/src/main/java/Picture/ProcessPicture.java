@@ -18,13 +18,16 @@ public class ProcessPicture {
     public void  readPciture(String picturePath){
 
         File f = new File(picturePath);
-
-        try {
-            FileInputStream inputStream = new FileInputStream(f);
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-            bitmap = BitmapFactory.decodeStream(bufferedInputStream);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if(f.isFile()) {
+            try {
+                FileInputStream inputStream = new FileInputStream(f);
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+                bitmap = BitmapFactory.decodeStream(bufferedInputStream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }else {
+            bitmap =null;
         }
     }
     public Bitmap getBitmap(){
