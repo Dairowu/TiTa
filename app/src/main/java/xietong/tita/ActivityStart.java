@@ -25,7 +25,7 @@ public class ActivityStart extends Activity {
                     Utils.loadFromSD(ActivityStart.this);
                     Intent intent = new Intent(ActivityStart.this,MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    Thread.sleep(1300);
+                    Thread.sleep(1500);
                     startActivity(intent);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

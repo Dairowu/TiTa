@@ -84,9 +84,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/sel_popdown_item"
-            android:drawableTop="@mipmap/actionbar_new"
+            android:drawableTop="@mipmap/popdown_unlike"
             android:paddingTop="5dp"
-            android:text="@string/add_to"
+            android:text="@string/myfavor"
             android:textColor="@color/white"
             android:textSize="12sp" />
 

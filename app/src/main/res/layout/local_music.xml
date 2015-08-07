@@ -24,19 +24,20 @@
 
                 <ImageButton
                     android:id="@+id/local_actionbar_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:src="@mipmap/playlist" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="false"
+                    android:background="@mipmap/btback_normal"
+                    android:padding="3dp" />
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="@color/darkgrey" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
@@ -51,18 +52,18 @@
                 android:paddingLeft="10dp"
                 android:singleLine="true"
                 android:text="@string/local_list"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/local_actionbar_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-
-                android:padding="15dp"
-                android:src="@mipmap/actionbar_scan" />
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/actionbar_scan" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/darkgrey" />

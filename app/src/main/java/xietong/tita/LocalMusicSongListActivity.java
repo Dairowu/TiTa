@@ -112,6 +112,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 sendBroadcast(intent);
                 Log.e("TiTa", "列表項點擊" + i);
             }
+            Utils.getAdapter().setSelectItem(i);
 
         }
 

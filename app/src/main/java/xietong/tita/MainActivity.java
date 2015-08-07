@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -84,19 +86,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigationView.setNavigationItemSelectedListener(new NavigationListener());
         }
 
-        //开启service
-        startService(new Intent(MainActivity.this, MusicService.class));
-
-        //修改显示
-        String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
-        String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
-        textArtist.setText(artist);
-        textTitle.setText(title);
-
         //初始化广播
         MyNotification.prepareNotification(MainActivity.this);
 //        MyNotification.rePreareNotify(MainActivity.this);
         Log.e("MainActivity", "调用OnCreate");
+
+        //开启service
+        startService(new Intent(MainActivity.this, MusicService.class));
+
+        if (Utils.getCurrentSong() >= 0 && Utils.getCurrentSong() < Utils.getList().size()) {        //修改显示
+            String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
+            String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+            textArtist.setText(artist);
+            textTitle.setText(title);
+        }
 
         //打开应用时提醒在哪首歌
         new Thread(new Runnable() {
@@ -144,7 +147,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bnLike.setOnClickListener(this);
         bndownLoad.setOnClickListener(this);
 
-        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, Utils.getList());
+        Cursor cursor;
+        cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                null, null, null, MediaStore.Audio.AudioColumns.TITLE);
+        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, cursor);
         Utils.setAdapter(baseAdapter);
 
         //表示从Service接受到的Broadcast将在ServiceReciver处理
@@ -192,10 +198,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.local_miniplayer_play:
                 //修改播放按钮的显示
-                if (Utils.getStatus()!=Utils.PLAYING){
+                if (Utils.getStatus() != Utils.PLAYING) {
                     bnPlay.setSelected(true);
-                }
-                else {
+                } else {
                     bnPlay.setSelected(false);
                 }
                 Utils.bnSendBroadcast(MainActivity.this, Utils.BN_PLAY);
@@ -235,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //点击关于
                 case R.id.nav_about:
-                    Intent intentToInfo = new Intent(MainActivity.this,AppInfoActivity.class);
+                    Intent intentToInfo = new Intent(MainActivity.this, AppInfoActivity.class);
                     intentToInfo.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intentToInfo);
                     msg += "关于";
@@ -307,10 +312,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textTitle.setText(title);
         drawerLayout.closeDrawers();
 
-        if (Utils.getStatus()!=Utils.PLAYING){
+        if (Utils.getStatus() != Utils.PLAYING) {
             bnPlay.setSelected(false);
-        }
-        else {
+        } else {
             bnPlay.setSelected(true);
         }
         super.onResume();
@@ -320,13 +324,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         unregisterReceiver(receiver);
-        Log.e("MainActivity","onStop");
+        Log.e("MainActivity", "onStop");
         super.onStop();
     }
 
     @Override
     protected void onRestart() {
-        Log.e("MainA","onRestart");
+        Log.e("MainA", "onRestart");
         receiver = new ListServiceReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Utils.ACTION_TO_MAIN);
@@ -363,10 +367,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             textArtist.setText(artist);
             textTitle.setText(title);
             //修改播放按钮的显示
-            if (Utils.getStatus()!=Utils.PLAYING){
+            if (Utils.getStatus() != Utils.PLAYING) {
                 bnPlay.setSelected(false);
-            }
-            else {
+            } else {
                 bnPlay.setSelected(true);
             }
         }
