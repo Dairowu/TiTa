@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xietong.tita" >
+
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--读取内存卡的歌曲信息-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <!--使歌词界面常亮-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--获得锁屏权限-->
+    <uses-permission android:name="ANDROID.PERMISSION.DISABLE_KEYGUARD"/>
     <application
         android:name=".FinishApp"
         android:allowBackup="true"
@@ -81,6 +87,20 @@
         <activity android:name=".AppInfoActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ActivitySetting">
+            <intent-filter>
+                <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name=".LockService"/>
+
+        <activity android:name=".LockActivity">
+            <intent-filter>
+                <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT"/>
             </intent-filter>
         </activity>
 
