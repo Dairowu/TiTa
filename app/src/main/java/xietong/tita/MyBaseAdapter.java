@@ -159,7 +159,22 @@ public class MyBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Log.e("detail", "click");
-//                Toast.makeText(context, "歌曲信息", Toast.LENGTH_SHORT).show();
+//                int p = (Integer) v.getTag();
+//                MusicDBHelper helper = new MusicDBHelper(context, DbFinal.DB_NAME, null, DbFinal.DB_VERSION);
+//                ArrayList<MusicInfo> musicList = helper
+//                        .getMusicListFromLocal(cursor);
+//                MusicInfo m = musicList.get(p);
+//                String title = m.getTitle();
+//                String artist = m.getArtist();
+//                String album = m.getAlbum();
+//                String size = m.getSize() / 1024.0f / 1024.0f + "";
+//                size = size.substring(0, 3) + "M";
+//                String duration = m.getDuration() / 1000.0f / 60.0f + "";
+//                duration = duration.substring(0, 4) + "分";
+//                String path = m.getPath();
+//                ToastShow.toastShow(context, "歌曲名称：" + title + "\n歌手：" + artist
+//                        + "\n专辑：" + album + "\n歌曲大小：" + size + "\n歌曲时长："
+//                        + duration + "\n文件路径：" + path);
             }
         });
         // 设置删除按钮点击事件

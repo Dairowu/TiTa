@@ -34,5 +34,6 @@
     <string name="title_default">欢迎来到我的音乐</string>
     <string name="artist_default">让音乐跟我走</string>
     <string name="local_list">本地列表</string>
+    <string name="favor_list">我喜欢</string>
 
 </resources>

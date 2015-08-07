@@ -29,7 +29,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
     ListServiceReceiver receiver;
 
     //定义底部切歌的处理
-    ImageButton bnNext, bnPlay, bnLast;
+    ImageButton bnNext, bnPlay, bnLast,bnBack;
 
     TextView textArtist,textTitle;
 
@@ -44,11 +44,13 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         bnNext = (ImageButton) findViewById(R.id.local_miniplayer_next);
         bnLast = (ImageButton) findViewById(R.id.local_miniplayer_last);
         bnPlay = (ImageButton) findViewById(R.id.local_miniplayer_play);
+        bnBack = (ImageButton) findViewById(R.id.local_actionbar_back);
         textArtist = (TextView) findViewById(R.id.local_miniplayer_artist);
         textTitle = (TextView) findViewById(R.id.local_miniplayer_song);
         bnPlay.setOnClickListener(this);
         bnNext.setOnClickListener(this);
         bnLast.setOnClickListener(this);
+        bnBack.setOnClickListener(this);
 
         mini_relativeLayout = (RelativeLayout) findViewById(R.id.local_miniplayer_layout);
         mini_relativeLayout.setOnClickListener(this);
@@ -91,6 +93,11 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
                 Intent intent = new Intent(LocalMusicSongListActivity.this,TiTa.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                break;
+            case R.id.local_actionbar_back:
+                Intent intent1 = new Intent(LocalMusicSongListActivity.this, MainActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent1);
                 break;
         }
     }
