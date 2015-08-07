@@ -256,6 +256,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //点击设置
                 case R.id.nav_setting:
+                    Intent intentToSetting = new Intent(MainActivity.this,ActivitySetting.class);
+                    intentToSetting.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intentToSetting);
                     msg += "设置";
                     break;
             }

@@ -51,7 +51,7 @@
             android:background="@drawable/menu_like"
             />
         <Button
-            android:id="@+id/menu_share"
+            android:id="@+id/bn_lrc_share"
             android:layout_marginLeft="8dp"
             android:layout_width="35dp"
             android:layout_height="35dp"

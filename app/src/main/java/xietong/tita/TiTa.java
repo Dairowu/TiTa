@@ -9,14 +9,15 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -56,11 +57,14 @@ public class TiTa extends Activity implements View.OnClickListener {
     private PopupWindow popupWindow = null;
 
     ImageButton buttonPlay, buttonNext, buttonLast;
-    Button bnLrcBack;
+    Button bnLrcBack, bnLrcShare;
 
     TextView lrcTitle, lrcArtist;
     //根布局
     RelativeLayout layoutThis;
+
+    PowerManager powerManager;
+    PowerManager.WakeLock wakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +95,10 @@ public class TiTa extends Activity implements View.OnClickListener {
         buttonLast = (ImageButton) findViewById(R.id.buttonLast);
         buttonNext = (ImageButton) findViewById(R.id.buttonNext);
         bnLrcBack = (Button) findViewById(R.id.bnLrcBack);
+        bnLrcShare = (Button) findViewById(R.id.bn_lrc_share);
         textProgressChange = (TextView) findViewById(R.id.textProgressChange);
         spinner_mode = (Spinner) findViewById(R.id.play_mode);
-        lyricView = (LyricView)findViewById(R.id.lrc);
+        lyricView = (LyricView) findViewById(R.id.lrc);
         //用来修改界面
         layoutThis = (RelativeLayout) findViewById(R.id.layout_lrc);
 
@@ -105,6 +110,7 @@ public class TiTa extends Activity implements View.OnClickListener {
         buttonPlay.setOnClickListener(this);
         buttonLast.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
+        bnLrcShare.setOnClickListener(this);
         seekBarTime.setOnSeekBarChangeListener(new seekBarListener());
 
         //设置歌名可滚动
@@ -115,7 +121,7 @@ public class TiTa extends Activity implements View.OnClickListener {
         bnLrcBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TiTa.this,MainActivity.class);
+                Intent intent = new Intent(TiTa.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
@@ -144,8 +150,8 @@ public class TiTa extends Activity implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Utils.setPlayMode(i);
-                String[] mode = new String[]{"顺序播放","随机播放","单曲循环"};
-                Toast.makeText(TiTa.this,mode[i],Toast.LENGTH_LONG).show();
+                String[] mode = new String[]{"顺序播放", "随机播放", "单曲循环"};
+                Toast.makeText(TiTa.this, mode[i], Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -163,10 +169,9 @@ public class TiTa extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.buttonPlay:
                 //修改播放按钮的显示
-                if (Utils.getStatus()!=Utils.PLAYING){
+                if (Utils.getStatus() != Utils.PLAYING) {
                     buttonPlay.setSelected(true);
-                }
-                else {
+                } else {
                     buttonPlay.setSelected(false);
                 }
                 intent.putExtra("buttonChoose", Utils.BN_PLAY);
@@ -180,6 +185,16 @@ public class TiTa extends Activity implements View.OnClickListener {
             case R.id.buttonNext:
                 intent.putExtra("buttonChoose", Utils.BN_NEXT);
                 lyricView.invalidate();
+                break;
+            //点击分享
+            case R.id.bn_lrc_share:
+                String share = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString()+"-"
+                        +Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+                Intent intentToShare = new Intent();
+                intentToShare.setAction(Intent.ACTION_SEND);
+                intentToShare.setType("text/*");
+                intentToShare.putExtra(Intent.EXTRA_TEXT, "我正在使用TiTa听 " + share);
+                startActivity(Intent.createChooser(intentToShare, "分享你正在听的歌曲"));
                 break;
         }
         intent.putExtra("progress", seekBarTime.getProgress());
@@ -236,17 +251,16 @@ public class TiTa extends Activity implements View.OnClickListener {
                 lrcTitle.setText(title);
 
                 //修改播放按钮的显示
-                if (Utils.getStatus()!=Utils.PLAYING){
+                if (Utils.getStatus() != Utils.PLAYING) {
                     buttonPlay.setSelected(false);
-                }
-                else {
+                } else {
                     buttonPlay.setSelected(true);
                 }
 
             } else {
-                Log.e("過來的消息",""+freshProgress);
-                Log.i("info","freshProgress"+freshProgress);
-                Log.i("info","index"+lyricProcess.selectIndex(freshProgress));
+                Log.e("過來的消息", "" + freshProgress);
+                Log.i("info", "freshProgress" + freshProgress);
+                Log.i("info", "index" + lyricProcess.selectIndex(freshProgress));
                 lyricView.setIndex(lyricProcess.selectIndex(freshProgress));
                 lyricView.invalidate();
                 seekBarTime.setProgress(freshProgress);
@@ -297,7 +311,7 @@ public class TiTa extends Activity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(TiTa.this,MainActivity.class);
+        Intent intent = new Intent(TiTa.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
@@ -327,33 +341,45 @@ public class TiTa extends Activity implements View.OnClickListener {
         }
 
         //修改播放按钮的显示
-        if (Utils.getStatus()!=Utils.PLAYING){
+        if (Utils.getStatus() != Utils.PLAYING) {
             buttonPlay.setSelected(false);
-        }
-        else {
+        } else {
             buttonPlay.setSelected(true);
         }
 
+        //获取系统屏幕常亮的权限
+        powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "TiTa");
+//        在释放之前，屏幕一直亮着
+        boolean isCheck = getSharedPreferences("music_play", MODE_WORLD_READABLE).getBoolean("isCheck", true);
+        if (isCheck) {
+            wakeLock.acquire();
+        }
         super.onResume();
     }
 
     @Override
     protected void onPause() {
         unregisterReceiver(receiver);
+        //使屏幕恢复正常显示时间
+        boolean isCheck = getSharedPreferences("music_play", MODE_WORLD_READABLE).getBoolean("isCheck", true);
+        if (isCheck) {
+            wakeLock.release();
+        }
         super.onPause();
     }
 
     /**
      * 将歌曲文件读取进来并进行处理
      */
-    public void searchLrc(String songPath){
+    public void searchLrc(String songPath) {
         //歌词路径
         String lrcPath = songPath;
-        lrcPath = lrcPath.substring(0,songPath.length()-4).trim() +  ".lrc";
+        lrcPath = lrcPath.substring(0, songPath.length() - 4).trim() + ".lrc";
         lyricProcess.readLRC(lrcPath);
         lyricView.setBlLrc(lyricProcess.getBlLrc());
         List<LyricObject> list = lyricProcess.getLrcList();
-        Log.i("info","length"+list.size());
+        Log.i("info", "length" + list.size());
         lyricView.setlrc_list(list);
     }
 
