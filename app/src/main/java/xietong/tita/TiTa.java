@@ -433,6 +433,7 @@ public class TiTa extends Activity implements View.OnClickListener {
         Drawable drawable = Utils.getDrawableBackground(TiTa.this);
         Drawable artistBitmap = searchPicture(title);
         Log.i("info","drawable"+drawable.toString());
+        Log.i("info","drawable"+drawable.toString());
         Log.i("info","artistBitmap"+artistBitmap.toString());
         if (artistBitmap!=null){
             layoutThis.setBackground(artistBitmap);
