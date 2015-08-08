@@ -217,6 +217,8 @@ public class MyBaseAdapter extends BaseAdapter {
     //        convertView = LayoutInflater.from(context).inflate
 //                (R.layout.music_listview_item, null);
 //
+
+
 //        TextView songShow = (TextView) convertView.findViewById(R.id.music_listitem_song_text);
 //        TextView songPath = (TextView) convertView.findViewById(R.id.music_listitem_artist_text);
 //        songShow.setText(songLists.get(position).get("songTitle").toString());
