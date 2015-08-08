@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -147,6 +148,8 @@ public class MyNotification {
     }
 
     public static void finishNotify() {
+
+        Log.e("MyNotification","finishNotify");
         notificationManager.cancel(notifyId);
     }
 

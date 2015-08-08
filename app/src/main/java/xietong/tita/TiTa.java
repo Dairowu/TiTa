@@ -6,9 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -24,14 +29,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import DownLoadUtils.DownPictureOrLrc;
 import Lrc.LyricObject;
 import Lrc.LyricProcess;
 import Lrc.LyricView;
+import Picture.ProcessPicture;
 
 /**
  * by LZC
@@ -49,12 +57,20 @@ public class TiTa extends Activity implements View.OnClickListener {
     int songStatus;
     //用来确定当前播放的时间
     int songNow = 0;
+    //用来标示是下载图片还是歌词
+    int DOWNLRC  = 1;
+    int DOWNPICTURE = 2;
     //自定义显示歌词的view
     private LyricView lyricView;
     //用来对歌词文件进行处理
     private LyricProcess lyricProcess = new LyricProcess();
     //泡泡窗弹出后供用户选择下载图片和歌词
     private PopupWindow popupWindow = null;
+    //下载图片或者歌词的工具类
+    DownPictureOrLrc downPictureOrLrc;
+    ProcessPicture processPicture = new ProcessPicture();
+    Bitmap bitmap;
+    private String path = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"Music";
 
     ImageButton buttonPlay, buttonNext, buttonLast;
     Button bnLrcBack, bnLrcShare;
@@ -66,6 +82,22 @@ public class TiTa extends Activity implements View.OnClickListener {
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
 
+   public Handler handler = new Handler(){
+
+        public void handleMessage(Message msg) {
+            if(msg.what==0x111){
+                if(msg.arg1==DOWNLRC){
+                    searchLrc((String) msg.obj);
+                    lyricView.invalidate();
+                }else if(msg.arg1==DOWNPICTURE){
+                    layoutThis.invalidate();
+                    changeBackground((String) msg.obj);
+                }
+            }
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +105,7 @@ public class TiTa extends Activity implements View.OnClickListener {
         FinishApp.addActivity(TiTa.this);
 
         init();
+
 //        //启动后台播放音乐的Service
 //        Intent intent = new Intent(this, MusicService.class);
 //        startService(intent);
@@ -81,10 +114,10 @@ public class TiTa extends Activity implements View.OnClickListener {
         //加载播放模式的Spinner
         loadPlayMode();
         spinner_mode.setSelection(Utils.play_mode);
-
     }
 
     //初始化按鈕并添加監聽
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void init() {
         seekBarTime = (SeekBar) findViewById(R.id.seekBarTime);
         textTimeNow = (TextView) findViewById(R.id.textSongTimeNow);
@@ -102,8 +135,9 @@ public class TiTa extends Activity implements View.OnClickListener {
         //用来修改界面
         layoutThis = (RelativeLayout) findViewById(R.id.layout_lrc);
 
-        String songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
-        searchLrc(songPath);
+//        String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+//        changeBackground(title);
+//        searchLrc(title);
 
         //初始化播放时间以及歌曲长度
         textTimeNow.setText("0:00");
@@ -179,12 +213,10 @@ public class TiTa extends Activity implements View.OnClickListener {
 
             case R.id.buttonLast:
                 intent.putExtra("buttonChoose", Utils.BN_LAST);
-                lyricView.invalidate();
                 break;
 
             case R.id.buttonNext:
                 intent.putExtra("buttonChoose", Utils.BN_NEXT);
-                lyricView.invalidate();
                 break;
             //点击分享
             case R.id.bn_lrc_share:
@@ -244,9 +276,15 @@ public class TiTa extends Activity implements View.OnClickListener {
                 //修改標題欄的信息
                 String artist = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString();
                 String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
-                //获取新的路径
-                String songPath = Utils.getList().get(Utils.getCurrentSong()).get("songPath").toString();
-                searchLrc(songPath);
+
+                lyricView.setHandler(handler);
+                lyricView.setTile(title);
+                lyricView.setOnClickListener(lyricView);
+
+                searchLrc(title);
+                lyricView.invalidate();
+                changeBackground(title);
+                layoutThis.invalidate();
                 lrcArtist.setText(artist);
                 lrcTitle.setText(title);
 
@@ -258,9 +296,6 @@ public class TiTa extends Activity implements View.OnClickListener {
                 }
 
             } else {
-                Log.e("過來的消息", "" + freshProgress);
-                Log.i("info", "freshProgress" + freshProgress);
-                Log.i("info", "index" + lyricProcess.selectIndex(freshProgress));
                 lyricView.setIndex(lyricProcess.selectIndex(freshProgress));
                 lyricView.invalidate();
                 seekBarTime.setProgress(freshProgress);
@@ -335,10 +370,10 @@ public class TiTa extends Activity implements View.OnClickListener {
         registerReceiver(receiver, intentFilter);
 
         //执行换肤
-        Drawable drawable = Utils.getDrawableBackground(TiTa.this);
-        if (drawable != null) {
-            layoutThis.setBackground(drawable);
-        }
+        searchLrc(title);
+        lyricView.invalidate();
+        changeBackground(title);
+        layoutThis.invalidate();
 
         //修改播放按钮的显示
         if (Utils.getStatus() != Utils.PLAYING) {
@@ -372,15 +407,44 @@ public class TiTa extends Activity implements View.OnClickListener {
     /**
      * 将歌曲文件读取进来并进行处理
      */
-    public void searchLrc(String songPath) {
+    public void searchLrc(String title){
         //歌词路径
-        String lrcPath = songPath;
-        lrcPath = lrcPath.substring(0, songPath.length() - 4).trim() + ".lrc";
+        String lrcPath = path + File.separator+title +  ".lrc";
         lyricProcess.readLRC(lrcPath);
         lyricView.setBlLrc(lyricProcess.getBlLrc());
         List<LyricObject> list = lyricProcess.getLrcList();
-        Log.i("info", "length" + list.size());
         lyricView.setlrc_list(list);
+        lyricView.invalidate();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public Drawable searchPicture(String title){
+            String picturePath = path +File.separator+ title +  ".jpg";
+            processPicture.readPciture(picturePath);
+            bitmap = processPicture.getBitmap();
+            if(bitmap!=null) {
+                Drawable drawable = new BitmapDrawable(bitmap);
+                return drawable;
+            }
+        return null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void changeBackground(String title){
+        //执行换肤
+        Drawable drawable = Utils.getDrawableBackground(TiTa.this);
+        Drawable artistBitmap = searchPicture(title);
+        Log.i("info","drawable"+drawable.toString());
+        Log.i("info","drawable"+drawable.toString());
+//        Log.i("info","artistBitmap"+artistBitmap.toString());
+        if (artistBitmap!=null){
+            layoutThis.setBackground(artistBitmap);
+            Log.e("TiTa", "artistBitmap");
+        }
+        else  {
+            Log.e("TiTa","drawable");
+            layoutThis.setBackground(drawable);
+        }
     }
 
 }

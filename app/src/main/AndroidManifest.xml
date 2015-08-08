@@ -96,7 +96,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".LockService"/>
+        <service android:name=".LockService">
+            <intent-filter>
+                <action android:name="com.example.service.LOCK_SERVICE"/>
+            </intent-filter>
+        </service>
 
         <activity android:name=".LockActivity">
             <intent-filter>

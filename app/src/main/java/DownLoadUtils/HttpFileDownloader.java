@@ -60,7 +60,7 @@ public class HttpFileDownloader {
 			
 			String line = "";
 			while((line=bufferedReader.readLine())!=null){
-				bufferedWriter.write(line);
+				bufferedWriter.write(line+"\n");
 			}
 			//�关闭资源
 			bufferedWriter.flush();

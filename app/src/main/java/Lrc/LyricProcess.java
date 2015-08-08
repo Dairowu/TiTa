@@ -1,8 +1,6 @@
 package Lrc;
 
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +12,7 @@ import java.util.List;
 
 public class LyricProcess {
 
-	private List<LyricObject> lrcList = new ArrayList<LyricObject>();
+	private List<LyricObject> lrcList;
 	private LyricObject lyricObject = new LyricObject();
 	//用来判断该路径下是否是文件
 	private boolean blLrc = false;
@@ -34,14 +32,14 @@ public class LyricProcess {
 			InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 			BufferedReader br = new BufferedReader(isr);
 			String s = "";
+			lrcList = new ArrayList<LyricObject>();
 			while((s = br.readLine()) != null) {
+
 				//替换字符
 				s = s.replace("[", "");
 				s = s.replace("]", "@");
-
 				//分离“@”字符
 				String splitLrcData[] = s.split("@");
-
 				if(splitLrcData.length > 1) {
 					lyricObject.lrcline=splitLrcData[1];
 					//处理歌词取得歌曲的时间
@@ -67,7 +65,6 @@ public class LyricProcess {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Log.i("info", "length" + lrcList.size());
 		LyricObject oldval  = null;
 		for(int i = 0;i<lrcList.size();i++){
 			LyricObject val = lrcList.get(i);
@@ -81,7 +78,6 @@ public class LyricProcess {
 				oldval = val;
 			}
 		}
-		Log.i("info", "length" + lrcList.size());
 	}
 
 	public int time2Str(String timeStr) {
@@ -89,11 +85,15 @@ public class LyricProcess {
 		timeStr = timeStr.replace(".", "@");
 
 		String timeData[] = timeStr.split("@"); //将时间分隔成字符串数组
-
 		//分离出分、秒并转换为整型
-		int minute = Integer.parseInt(timeData[0]);
-		int second = Integer.parseInt(timeData[1]);
-		int millisecond = Integer.parseInt(timeData[2]);
+		int minute = 0;
+		int second = 0;
+		int millisecond = 0;
+		if(timeData.length==3) {
+			 minute = Integer.parseInt(timeData[0].trim());
+			 second = Integer.parseInt(timeData[1].trim());
+			 millisecond = Integer.parseInt(timeData[2].trim());
+		}
 
 		//计算上一行与下一行的时间转换为毫秒数
 		int currentTime = (minute * 60 + second) * 1000 + millisecond * 10;

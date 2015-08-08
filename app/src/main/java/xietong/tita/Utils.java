@@ -190,27 +190,30 @@ public class Utils {
         //执行加入歌曲
         while (cursor.moveToNext()) {
 
-                String songTitle = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
-                String songArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
-                String songAlbum = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));
-                String songDuration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
-                String songDisplay = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME));
-                String songPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA));
-                String songSize = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.SIZE));
 
-                //用来显示在列表界面的歌曲名称
-                String songShow = songDisplay.substring(0, songDisplay.indexOf("."));
+            String songTitle = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
+            String songArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
+            String songAlbum = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));
+            String songDuration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION));
+            String songDisplay = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME));
+            String songPath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA));
+            String songSize = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.SIZE));
 
-                Map<String, Object> song = new HashMap<String, Object>();
-                song.put("songTitle", songTitle);
-                song.put("songArtist", songArtist);
-                song.put("songAlbum", songAlbum);
-                song.put("songDuration", songDuration);
-                song.put("songDisplay", songDisplay);
-                song.put("songPath", songPath);
-                song.put("songSize", songSize);
-                song.put("songShow", songShow);
-                songList.add(song);
+            //用来显示在列表界面的歌曲名称
+            String songShow = "";
+            if(songDisplay!=null) {
+                songShow = songDisplay.substring(0, songDisplay.indexOf("."));
+            };
+            Map<String, Object> song = new HashMap<String, Object>();
+            song.put("songTitle", songTitle);
+            song.put("songArtist", songArtist);
+            song.put("songAlbum", songAlbum);
+            song.put("songDuration", songDuration);
+            song.put("songDisplay", songDisplay);
+            song.put("songPath", songPath);
+            song.put("songSize", songSize);
+            song.put("songShow", songShow);
+            songList.add(song);
         }
         cursor.close();
     }
@@ -247,8 +250,8 @@ public class Utils {
 
     public static Drawable getDrawableBackground(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("music_play", context.MODE_WORLD_READABLE);
-        String background = sharedPreferences.getString("background", null);
-        if (background != null) {
+        String background = sharedPreferences.getString("background", "");
+        if (background != "") {
             Uri uri = Uri.parse(background);
             Drawable drawable = null;
             try {

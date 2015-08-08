@@ -17,6 +17,7 @@ public class ActivitySetting extends Activity {
 
     Button bnBack;
     Switch switchWake;
+    Switch switchLock;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Boolean isChecked;
@@ -28,11 +29,20 @@ public class ActivitySetting extends Activity {
 
         bnBack = (Button) findViewById(R.id.bnSettingBack);
         switchWake = (Switch) findViewById(R.id.switchWake);
+        switchLock = (Switch) findViewById(R.id.switchLock);
 
         switchWake.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 editor.putBoolean("isCheck",isChecked);
+                editor.commit();
+            }
+        });
+
+        switchLock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                editor.putBoolean("isLock",isChecked);
                 editor.commit();
             }
         });
@@ -53,6 +63,8 @@ public class ActivitySetting extends Activity {
         editor = sharedPreferences.edit();
         isChecked = sharedPreferences.getBoolean("isCheck",true);
         switchWake.setChecked(isChecked);
+
+        switchLock.setChecked(getSharedPreferences("music_play", MODE_WORLD_READABLE).getBoolean("isLock",true));
         super.onResume();
     }
 }

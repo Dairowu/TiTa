@@ -21,8 +21,7 @@ public class ActivityStart extends Activity {
         FinishApp.addActivity(this);
 
         //如果换肤的结果是为空的话
-        String string;
-        string = getSharedPreferences("music_play", MODE_WORLD_READABLE)
+        String string = getSharedPreferences("music_play", MODE_WORLD_READABLE)
                 .getString("background", "");
         SharedPreferences.Editor editor = getSharedPreferences("music_play", MODE_WORLD_READABLE).edit();
         if (string.equals("")) {
@@ -42,9 +41,12 @@ public class ActivityStart extends Activity {
                 try {
                     //加载音乐到list
                     Utils.loadFromSD(ActivityStart.this);
+
                     Intent intent = new Intent(ActivityStart.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
                     startService(new Intent(ActivityStart.this, LockService.class));
+
                     Thread.sleep(1400);
                     startActivity(intent);
                 } catch (InterruptedException e) {
