@@ -6,6 +6,8 @@
     android:background="@color/normal"
     android:orientation="vertical">
 
+
+
     <LinearLayout
         android:id="@+id/local_actionbar"
         android:layout_width="match_parent"
