@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Dialog.DeleteDialog;
 import Dialog.InfoDialog;
 import Dialog.TVAnimDialog;
 import SQLite.MusicDBHelper;
@@ -208,6 +209,8 @@ public class MyBaseAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Log.e("delete", "click");
 //                Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
+                DeleteDialog DeleteDialog = new DeleteDialog(v.getContext());
+                DeleteDialog.show();
             }
         });
 
