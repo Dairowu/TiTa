@@ -153,7 +153,6 @@ public class MusicService extends Service {
                     mediaPlayer.seekTo(progress);
                     break;
                 default:
-
             }
 
             Intent intent1 = new Intent(Utils.ACTION_TO_MAIN);
