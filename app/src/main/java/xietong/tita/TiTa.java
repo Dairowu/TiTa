@@ -90,8 +90,8 @@ public class TiTa extends Activity implements View.OnClickListener {
                     searchLrc((String) msg.obj);
                     lyricView.invalidate();
                 }else if(msg.arg1==DOWNPICTURE){
-                    changeBackground((String) msg.obj);
                     layoutThis.invalidate();
+                    changeBackground((String) msg.obj);
                 }
             }
         }
@@ -296,7 +296,6 @@ public class TiTa extends Activity implements View.OnClickListener {
                 }
 
             } else {
-                Log.e("過來的消息", "" + freshProgress);
                 lyricView.setIndex(lyricProcess.selectIndex(freshProgress));
                 lyricView.invalidate();
                 seekBarTime.setProgress(freshProgress);
@@ -437,11 +436,13 @@ public class TiTa extends Activity implements View.OnClickListener {
         Drawable artistBitmap = searchPicture(title);
         Log.i("info","drawable"+drawable.toString());
         Log.i("info","drawable"+drawable.toString());
-        Log.i("info","artistBitmap"+artistBitmap.toString());
+//        Log.i("info","artistBitmap"+artistBitmap.toString());
         if (artistBitmap!=null){
             layoutThis.setBackground(artistBitmap);
+            Log.e("TiTa", "artistBitmap");
         }
-        else if (drawable != null) {
+        else  {
+            Log.e("TiTa","drawable");
             layoutThis.setBackground(drawable);
         }
     }

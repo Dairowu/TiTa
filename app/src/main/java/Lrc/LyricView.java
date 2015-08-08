@@ -60,7 +60,7 @@ public class LyricView extends View implements View.OnClickListener{
 		paint.setColor(Color.argb(0,250,250,250));
 		paint.setAntiAlias(true);//设置抗锯齿
 		paint.setDither(true);//设置防止抖动
-		paint.setTextSize(20);
+		paint.setTextSize(27);
 		paint.setAlpha(180);
 
 		paintHL = new Paint();
@@ -68,7 +68,7 @@ public class LyricView extends View implements View.OnClickListener{
 		paintHL.setColor(Color.WHITE);
 		paintHL.setAntiAlias(true);
 		paintHL.setDither(true);
-		paintHL.setTextSize(24);
+		paintHL.setTextSize(37);
 		paintHL.setAlpha(255);
 
 	}
@@ -82,7 +82,7 @@ public class LyricView extends View implements View.OnClickListener{
 			canvas.drawText(temp.lrcline, width/2, tempY , paintHL);
 
 			//画出当前歌词之前的歌词
-			for(int i = index -1;i> index - 5&&i>0;i--){
+			for(int i = index -1;i> index - 8&&i>0;i--){
 				temp = lrc_list.get(i);
 				if(tempY<0){
 					continue;
@@ -93,7 +93,7 @@ public class LyricView extends View implements View.OnClickListener{
 
 			tempY = height/2;
 			//画出当前歌词之后的歌词
-			for(int i = index +1;i<index+5&&i<lrc_list.size();i++){
+			for(int i = index +1;i<index+8&&i<lrc_list.size();i++){
 				temp = lrc_list.get(i);
 				if(tempY>height){
 					continue;

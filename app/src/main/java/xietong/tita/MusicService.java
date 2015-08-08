@@ -111,15 +111,6 @@ public class MusicService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            boolean b = intent.getBooleanExtra("finish", false);
-            if (b) {
-                Log.e("musicService", "停止运行");
-                unregisterReceiver(receiver);
-                mediaPlayer.stop();
-                stopSelf();
-            }
-            isFinish = b;
-
             currentSong = Utils.getCurrentSong();
             int progress = intent.getIntExtra("progress", 0);
             int buttonChoose = intent.getIntExtra("buttonChoose", -1);
@@ -171,6 +162,15 @@ public class MusicService extends Service {
             Utils.setStatus(status);
             sendBroadcast(intent1);
 
+            //必须把停止应用的判断加到最后
+            boolean b = intent.getBooleanExtra("finish", false);
+            if (b) {
+                Log.e("musicService", "停止运行");
+                unregisterReceiver(receiver);
+                mediaPlayer.stop();
+                stopSelf();
+            }
+            isFinish = b;
             //得加上判断，否则退出程序后，通知栏刚消失又会出现
             if (!b)
                 MyNotification.showNotifyButton();

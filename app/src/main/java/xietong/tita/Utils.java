@@ -234,8 +234,8 @@ public class Utils {
 
     public static Drawable getDrawableBackground(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("music_play", context.MODE_WORLD_READABLE);
-        String background = sharedPreferences.getString("background", null);
-        if (background != null) {
+        String background = sharedPreferences.getString("background", "");
+        if (background != "") {
             Uri uri = Uri.parse(background);
             Drawable drawable = null;
             try {
