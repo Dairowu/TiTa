@@ -19,8 +19,8 @@ public class MusicInfo implements Serializable, Parcelable {
     private String artist;
     private String album;
     private String path;
-    private Long duration;
-    private Long size;
+    private String duration;
+    private String size;
     private String album_img_path;
 //    private String lyric_file_name;
 
@@ -64,19 +64,19 @@ public class MusicInfo implements Serializable, Parcelable {
         this.path = path;
     }
 
-    public Long getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
-    public Long getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Long size) {
+    public void setSize(String size) {
         this.size = size;
     }
 
@@ -100,8 +100,8 @@ public class MusicInfo implements Serializable, Parcelable {
         dest.writeString(this.artist);
         dest.writeString(this.path);
         dest.writeString(this.title);
-        dest.writeLong(this.size);
-        dest.writeLong(this.duration);
+        dest.writeString(this.size);
+        dest.writeString(this.duration);
     }
 
     public static final Creator<MusicInfo> CREATOR = new Creator<MusicInfo>() {
@@ -112,8 +112,8 @@ public class MusicInfo implements Serializable, Parcelable {
             music.setArtist(source.readString());
             music.setAlbum(source.readString());
             music.setPath(source.readString());
-            music.setDuration(source.readLong());
-            music.setSize(source.readLong());
+            music.setDuration(source.readString());
+            music.setSize(source.readString());
             music.setAlbum_img_path(source.readString());
 //            music.setLyric_file_name(source.readString());
             return music;

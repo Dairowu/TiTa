@@ -5,7 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -58,6 +60,12 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         //加載listView
         localListView = (ListView) findViewById(R.id.local_listview);
         songLists = Utils.getList();
+
+        Cursor cursor;
+        cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                null, null, null, MediaStore.Audio.AudioColumns.TITLE);
+        MyBaseAdapter baseAdapter = new MyBaseAdapter(this, cursor);
+        Utils.setAdapter(baseAdapter);
 
         listAdapter = Utils.getAdapter();
 //                new MyBaseAdapter(LocalMusicSongListActivity.this, songLists);
@@ -188,5 +196,6 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
             localListView.setSelection(Utils.getCurrentSong());
         else localListView.setSelection(Utils.getCurrentSong()-4);
     }
+
 
 }

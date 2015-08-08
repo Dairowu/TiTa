@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -131,33 +132,36 @@ public class MusicDBHelper extends SQLiteOpenHelper {
      * @param curLocal 本地数据库查询到的cursor
      * @return ArrayList<MusicInfo> 歌曲实体类集合
      */
-    public ArrayList<MusicInfo> getMusicListFromLocal(Cursor curLocal) {
+    public static ArrayList<MusicInfo> getMusicListFromLocal(Cursor curLocal) {
 
-        if (curLocal.getCount() != 0) {
-            curLocal.moveToFirst();
-            ArrayList<MusicInfo> musicList = new ArrayList<MusicInfo>();
-            do {
+        ArrayList<MusicInfo> musicList = new ArrayList<MusicInfo>();
+//        if (curLocal.getCount() != 0) {
+//            curLocal.moveToFirst();
+        while (curLocal.moveToNext()){
+
+//            do {
                 MusicInfo music = new MusicInfo();
                 music.setTitle(curLocal.getString(curLocal
-                        .getColumnIndex(DbFinal.LOCAL_TITLE)));
+                        .getColumnIndex(MediaStore.Audio.AudioColumns.TITLE)));
                 music.setArtist(curLocal.getString(curLocal
-                        .getColumnIndex(DbFinal.LOCAL_ARTIST)));
+                        .getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST)));
                 music.setAlbum(curLocal.getString(curLocal
-                        .getColumnIndex(DbFinal.LOCAL_ALBUM)));
+                        .getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM)));
                 music.setPath(curLocal.getString(curLocal
-                        .getColumnIndex(DbFinal.LOCAL_PATH)));
-                music.setDuration(curLocal.getLong(curLocal
-                        .getColumnIndex(DbFinal.LOCAL_DURATION)));
-                music.setSize(curLocal.getLong(curLocal
-                        .getColumnIndex(DbFinal.LOCAL_FILE_SIZE)));
+                        .getColumnIndex(MediaStore.Audio.AudioColumns.DATA)));
+                music.setDuration(curLocal.getString(curLocal
+                        .getColumnIndex(MediaStore.Audio.AudioColumns.DURATION)));
+                music.setSize(curLocal.getString(curLocal
+                        .getColumnIndex(MediaStore.Audio.AudioColumns.SIZE)));
 //                music.setLyric_file_name(curLocal.getString(curLocal
 //                        .getColumnIndex(DbFinal.LOCAL_LRC_TITLE)));
-                musicList.add(music);
-                curLocal.moveToNext();
-            } while (!curLocal.isAfterLast());
+                musicList.add(music);}
+//                curLocal.moveToNext();
+//            } while (!curLocal.isAfterLast());
+
             return musicList;
-        }
-        return null;
+//        }
+//        return null;
 
     }
 
