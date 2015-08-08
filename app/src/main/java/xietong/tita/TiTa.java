@@ -90,8 +90,9 @@ public class TiTa extends Activity implements View.OnClickListener {
                     searchLrc((String) msg.obj);
                     lyricView.invalidate();
                 }else if(msg.arg1==DOWNPICTURE){
-                    layoutThis.invalidate();
+                    Log.i("info", (String) msg.obj);
                     changeBackground((String) msg.obj);
+                    layoutThis.invalidate();
                 }
             }
         }
@@ -135,9 +136,12 @@ public class TiTa extends Activity implements View.OnClickListener {
         //用来修改界面
         layoutThis = (RelativeLayout) findViewById(R.id.layout_lrc);
 
-//        String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
-//        changeBackground(title);
-//        searchLrc(title);
+        String title = Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+        lyricView.setHandler(handler);
+        lyricView.setTile(title);
+        lyricView.setOnClickListener(lyricView);
+        changeBackground(title);
+        searchLrc(title);
 
         //初始化播放时间以及歌曲长度
         textTimeNow.setText("0:00");
@@ -434,15 +438,13 @@ public class TiTa extends Activity implements View.OnClickListener {
         //执行换肤
         Drawable drawable = Utils.getDrawableBackground(TiTa.this);
         Drawable artistBitmap = searchPicture(title);
-        Log.i("info","drawable"+drawable.toString());
-        Log.i("info","drawable"+drawable.toString());
 //        Log.i("info","artistBitmap"+artistBitmap.toString());
         if (artistBitmap!=null){
             layoutThis.setBackground(artistBitmap);
-            Log.e("TiTa", "artistBitmap");
+            Log.i("info", "artistBitmap"+title);
         }
         else  {
-            Log.e("TiTa","drawable");
+            Log.i("info","drawable"+title);
             layoutThis.setBackground(drawable);
         }
     }

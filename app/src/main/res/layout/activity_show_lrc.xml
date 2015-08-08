@@ -66,15 +66,25 @@
         <!--android:layout_above="@+id/textProgressChange"-->
         <!--android:scaleType="centerCrop"/>-->
 
-    <Lrc.LyricView
-        android:id="@+id/lrc"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title"
-        android:paddingTop="18dp"
-        android:paddingBottom="16dp"
-        android:layout_above="@+id/textProgressChange"/>
+        android:layout_above="@+id/textProgressChange"
+        >
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55555555"/>
+
+        <Lrc.LyricView
+            android:id="@+id/lrc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </FrameLayout>
 
     <!--RelativeLayout主要用来显示播放器下面的时间文本和seekbar-->
         <TextView

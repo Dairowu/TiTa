@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -60,7 +60,7 @@ public class LyricView extends View implements View.OnClickListener{
 		paint.setColor(Color.argb(0,250,250,250));
 		paint.setAntiAlias(true);//设置抗锯齿
 		paint.setDither(true);//设置防止抖动
-		paint.setTextSize(27);
+		paint.setTextSize(20);
 		paint.setAlpha(180);
 
 		paintHL = new Paint();
@@ -68,7 +68,7 @@ public class LyricView extends View implements View.OnClickListener{
 		paintHL.setColor(Color.WHITE);
 		paintHL.setAntiAlias(true);
 		paintHL.setDither(true);
-		paintHL.setTextSize(37);
+		paintHL.setTextSize(24);
 		paintHL.setAlpha(255);
 
 	}
@@ -153,7 +153,8 @@ public class LyricView extends View implements View.OnClickListener{
 		popupWindow = new PopupWindow(root, WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT,true );
 		popupWindow.setAnimationStyle(R.style.popupanimation);
 		popupWindow.setFocusable(true);
-		popupWindow.setBackgroundDrawable(new BitmapDrawable());
+		ColorDrawable color = new ColorDrawable(0x7DC0C0C0);
+		popupWindow.setBackgroundDrawable(color);
 		popupWindow.showAtLocation(root, Gravity.BOTTOM,0,0);
 
 		Button bt_downpicture = (Button) root.findViewById(R.id.bt_downpicture);

@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -72,14 +71,6 @@ public class HttpFileDownloader {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
-		} 
-		finally{
-			try {
-				bufferedWriter.close();
-				bufferedReader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	

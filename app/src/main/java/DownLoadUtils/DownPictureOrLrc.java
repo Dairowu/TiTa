@@ -79,6 +79,7 @@ public class DownPictureOrLrc implements Runnable{
                         if (i == 1) {
                             msg.what = 0x111;
                             msg.arg1 = flag;
+                            msg.obj = name;
                             handler.sendMessage(msg);
                             Toast.makeText(context, "下载成功", Toast.LENGTH_LONG).show();
                         } else if (i == 0) {
