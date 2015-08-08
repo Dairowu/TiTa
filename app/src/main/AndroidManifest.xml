@@ -69,7 +69,7 @@
 
         <activity android:name="downloadmp3.DownSongListActivity"></activity>
 
-        <activity android:name="guide.ActivityGuide"></activity>
+        <activity android:name="guide.dmemd"></activity>
 
         <service android:name="downloadmp3.DownloadService"></service>
 

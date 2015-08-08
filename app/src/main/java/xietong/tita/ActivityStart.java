@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import guide.ActivityGuide;
+import guide.dmemd;
 
 /**
  * Created by acer-PC on 2015/8/6.
@@ -41,7 +41,7 @@ public class ActivityStart extends Activity {
     };
 
     private void goGuide(){
-        Intent intent = new Intent(ActivityStart.this, ActivityGuide.class);
+        Intent intent = new Intent(ActivityStart.this, dmemd.class);
         startActivity(intent);
         finish();
     }
