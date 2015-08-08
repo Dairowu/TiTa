@@ -132,13 +132,6 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
 
     }
 
-    //设置浮动按钮的监听
-    public void checkin(View view) {
-        if (Utils.getCurrentSong() < 5 || Utils.getCurrentSong() > songLists.size() - 4)
-            localListView.setSelection(Utils.getCurrentSong());
-        else localListView.setSelection(Utils.getCurrentSong() - 4);
-    }
-
     @Override
     protected void onResume() {
 
@@ -191,6 +184,7 @@ public class LocalMusicSongListActivity extends Activity implements View.OnClick
         }
     }
 
+    //浮动按钮的监听事件
     public void floatClick(View view){
         if (Utils.getCurrentSong() < 5||Utils.getCurrentSong()>songLists.size()-4)
             localListView.setSelection(Utils.getCurrentSong());

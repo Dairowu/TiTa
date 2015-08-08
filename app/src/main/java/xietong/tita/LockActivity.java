@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 /**
  * Created by acer-PC on 2015/8/7.
+ * 锁屏界面
  */
 public class LockActivity extends Activity implements View.OnClickListener,GestureDetector.OnGestureListener {
 
@@ -42,6 +43,7 @@ public class LockActivity extends Activity implements View.OnClickListener,Gestu
         textArtist.setText(artist);
         textTitle.setText(title);
 
+        //添加手势检测
         detector = new GestureDetector(this,this);
 
         //表示从Service接受到的Broadcast将在ServiceReciver处理

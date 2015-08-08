@@ -57,11 +57,13 @@ public class ActivityStart extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        //把这个Activity添加，退出应用时才会finish
         FinishApp.addActivity(this);
 
         init();
 
         //如果换肤的结果是为空的话
+        //第一次使用时默认加载背景存储到sharedPreference
         String string = getSharedPreferences("music_play", MODE_WORLD_READABLE)
                 .getString("background", "");
         SharedPreferences.Editor editor = getSharedPreferences("music_play", MODE_WORLD_READABLE).edit();
@@ -96,11 +98,14 @@ public class ActivityStart extends Activity {
 
     private void init() {
         SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCE_NAME,MODE_PRIVATE);
-        isFirstIn = preferences.getBoolean("isFirstIn",true);
+        SharedPreferences.Editor editor = preferences.edit();
+        isFirstIn = preferences.getBoolean("isFirstIn", true);
         if(!isFirstIn){
             mhandler.sendEmptyMessageDelayed(GO_HOME,SPLASH_DELAY_MILLS);
         } else{
             mhandler.sendEmptyMessageDelayed(GO_GUIDE,SPLASH_DELAY_MILLS);
         }
+        editor.putBoolean("isFirstIn",false);
+        editor.commit();
     }
 }

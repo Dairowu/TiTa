@@ -181,7 +181,7 @@
                 android:src="@drawable/bn_bottom_next" />
 
             <ImageButton
-                android:id="@+id/bnSongList"
+                android:id="@+id/bnLrcList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"

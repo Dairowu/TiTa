@@ -77,10 +77,18 @@ public class DownloadMp3 extends ListActivity implements OnClickListener{
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(DownloadMp3.this, MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				startActivity(intent);
 			}
 		});
     }
+
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(DownloadMp3.this, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		startActivity(intent);
+	}
 
 	@Override
 	protected void onPause(){

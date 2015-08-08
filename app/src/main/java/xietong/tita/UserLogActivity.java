@@ -87,6 +87,7 @@ public class UserLogActivity extends Activity implements TextWatcher {
     @Override
     public void afterTextChanged(Editable editable) {
 
+        //只有当两个输入框都输入了信息时，按钮才可以点击
         if (userPassword.getText().toString().equals("")
                 || userPassword.getText().toString().equals("")) {
             bnLog.setEnabled(false);

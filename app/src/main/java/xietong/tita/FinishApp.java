@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,24 +18,23 @@ public class FinishApp extends Application {
 
     private static List<Activity> activityList = new ArrayList<Activity>();
 
+    //在每个Activity启动时调用该方法，加载所有的Activity
     public static void addActivity(Activity activity) {
         activityList.add(activity);
     }
 
     public static void finishAllActivity(Context context) {
+        //遍历所有加载过的Activity，如果还存活就结束掉他们
         for (Activity activity : activityList) {
             if (!activity.isFinishing())
                 activity.finish();
         }
+        //通知栏清除
         MyNotification.finishNotify();
-        Log.e("FinishApp", "发送消息");
+        //结束MusicService
         Intent intent = new Intent(Utils.ACTION_TO_MUSICSERVICE);
         intent.putExtra("finish", true);
         context.sendBroadcast(intent);
-
-//        Intent intentoLock = new Intent(Intent.ACTION_SCREEN_OFF);
-//        intentoLock.putExtra("finish",true);
-//        context.sendBroadcast(intentoLock);
     }
 
     @Override

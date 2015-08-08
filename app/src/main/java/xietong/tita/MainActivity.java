@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import downloadmp3.DownSongListActivity;
 import downloadmp3.DownloadMp3;
@@ -158,11 +159,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bnLike.setOnClickListener(this);
         bndownLoad.setOnClickListener(this);
 
-//        Cursor cursor;
-//        cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-//                null, null, null, MediaStore.Audio.AudioColumns.TITLE);
-//        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, cursor);
-//        Utils.setAdapter(baseAdapter);
+        Cursor cursor;
+        cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                null, null, null, MediaStore.Audio.AudioColumns.TITLE);
+        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, cursor);
+        Utils.setAdapter(baseAdapter);
 
         //表示从Service接受到的Broadcast将在ServiceReciver处理
         receiver = new ListServiceReceiver();
@@ -276,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //加载Menu
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -291,21 +293,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    //Toolbar的按钮监听
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
-            String msg = "";
             switch (menuItem.getItemId()) {
                 case R.id.toolbar_search:
                     Intent intent = new Intent(MainActivity.this, DownloadMp3.class);
                     startActivity(intent);
-                    msg += "点击了搜索歌曲的按钮";
                     break;
                 case R.id.toolbar_others:
-                    msg += "点击了其他设置的按钮";
                     break;
             }
-            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
             return false;
         }
     };
@@ -330,28 +329,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStop() {
-//        unregisterReceiver(receiver);
-        Log.e("MainActivity","onStop");
-        super.onStop();
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.e("MainA","onRestart");
-//        receiver = new ListServiceReceiver();
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(Utils.ACTION_TO_MAIN);
-//        registerReceiver(receiver, intentFilter);
-        super.onRestart();
-    }
-
-    @Override
     protected void onDestroy() {
         //注销广播
         unregisterReceiver(receiver);
         MyNotification.unRegistNotifyReceiver(MainActivity.this);
-        Log.e("onDestroy", "destroying");
         super.onDestroy();
     }
 
@@ -384,8 +365,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //处理悬浮按钮的点击事件
+    //启动跳到用户登录界面
     public void FloatBnUser(View view) {
-
         Intent intent = new Intent(MainActivity.this, UserLogActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

@@ -12,11 +12,14 @@ import android.widget.Switch;
 /**
  * Created by acer-PC on 2015/8/6.
  * 用来设置歌词界面是否常亮
+ * 用来设置是否显示锁屏
  */
 public class ActivitySetting extends Activity {
 
     Button bnBack;
+    //歌词界面常亮的开关
     Switch switchWake;
+    //锁屏是否显示歌词的开关
     Switch switchLock;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -57,6 +60,7 @@ public class ActivitySetting extends Activity {
         });
     }
 
+    //在重新返回这个界面时都会更新
     @Override
     protected void onResume() {
         sharedPreferences = getSharedPreferences("music_play", MODE_WORLD_READABLE);

@@ -9,6 +9,7 @@ import android.widget.Button;
 
 /**
  * Created by acer-PC on 2015/8/6.
+ *
  */
 public class AppInfoActivity extends Activity implements View.OnClickListener{
 

@@ -12,6 +12,9 @@ import android.util.Log;
 
 /**
  * Created by acer-PC on 2015/8/7.
+ * 应用启动时启动该Service
+ * 用来接收屏幕变暗变量的监听
+ * 并且在屏幕变暗后启动锁屏界面
  */
 public class LockService extends Service {
 
@@ -36,6 +39,7 @@ public class LockService extends Service {
         //因为并不是从一个Activity里面启动另一个Activity
         intentToActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+        //注册接受屏幕变量、变暗的监听
         IntentFilter intentFilterLockOn = new IntentFilter(Intent.ACTION_SCREEN_ON);
         this.registerReceiver(screenOnReceiver, intentFilterLockOn);
         IntentFilter intentFilterLockOff = new IntentFilter(Intent.ACTION_SCREEN_OFF);
@@ -52,7 +56,6 @@ public class LockService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e(TAG, "screenOn");
-//            startActivity(intentToActivity);
 
         }
     };
@@ -81,8 +84,6 @@ public class LockService extends Service {
         this.unregisterReceiver(screenOffReceiver);
         this.unregisterReceiver(screenOnReceiver);
         this.unregisterReceiver(receiver);
-//        //使服务常驻内存
-//        startService(new Intent(this,LockService.class));
     }
 
     public class MyServiceReceiver extends BroadcastReceiver {
@@ -92,9 +93,6 @@ public class LockService extends Service {
 
             boolean b = intent.getBooleanExtra("finish", false);
             if (b) {
-                Log.e(TAG, "停止运行");
-//                unregisterReceiver(receiver);
-//                mediaPlayer.stop();
                 stopSelf();
             }
         }

@@ -2,6 +2,7 @@ package xietong.tita;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,10 +18,15 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -58,7 +64,7 @@ public class TiTa extends Activity implements View.OnClickListener {
     //用来确定当前播放的时间
     int songNow = 0;
     //用来标示是下载图片还是歌词
-    int DOWNLRC  = 1;
+    int DOWNLRC = 1;
     int DOWNPICTURE = 2;
     //自定义显示歌词的view
     private LyricView lyricView;
@@ -70,9 +76,9 @@ public class TiTa extends Activity implements View.OnClickListener {
     DownPictureOrLrc downPictureOrLrc;
     ProcessPicture processPicture = new ProcessPicture();
     Bitmap bitmap;
-    private String path = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"Music";
+    private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Music";
 
-    ImageButton buttonPlay, buttonNext, buttonLast;
+    ImageButton buttonPlay, buttonNext, buttonLast, bnLrcList;
     Button bnLrcBack, bnLrcShare;
 
     TextView lrcTitle, lrcArtist;
@@ -82,11 +88,11 @@ public class TiTa extends Activity implements View.OnClickListener {
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
 
-   public Handler handler = new Handler(){
+    public Handler handler = new Handler() {
 
         public void handleMessage(Message msg) {
-            if(msg.what==0x111){
-                if(msg.arg1==DOWNLRC){
+            if (msg.what == 0x111) {
+                if (msg.arg1 == DOWNLRC) {
                     searchLrc((String) msg.obj);
                     lyricView.invalidate();
                 }else if(msg.arg1==DOWNPICTURE){
@@ -128,6 +134,7 @@ public class TiTa extends Activity implements View.OnClickListener {
         buttonPlay = (ImageButton) findViewById(R.id.buttonPlay);
         buttonLast = (ImageButton) findViewById(R.id.buttonLast);
         buttonNext = (ImageButton) findViewById(R.id.buttonNext);
+        bnLrcList = (ImageButton) findViewById(R.id.bnLrcList);
         bnLrcBack = (Button) findViewById(R.id.bnLrcBack);
         bnLrcShare = (Button) findViewById(R.id.bn_lrc_share);
         textProgressChange = (TextView) findViewById(R.id.textProgressChange);
@@ -149,6 +156,7 @@ public class TiTa extends Activity implements View.OnClickListener {
         buttonLast.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
         bnLrcShare.setOnClickListener(this);
+        bnLrcList.setOnClickListener(this);
         seekBarTime.setOnSeekBarChangeListener(new seekBarListener());
 
         //设置歌名可滚动
@@ -224,22 +232,78 @@ public class TiTa extends Activity implements View.OnClickListener {
                 break;
             //点击分享
             case R.id.bn_lrc_share:
-                String share = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString()+"-"
-                        +Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
+                String share = Utils.getList().get(Utils.getCurrentSong()).get("songArtist").toString() + "-"
+                        + Utils.getList().get(Utils.getCurrentSong()).get("songTitle").toString();
                 Intent intentToShare = new Intent();
                 intentToShare.setAction(Intent.ACTION_SEND);
                 intentToShare.setType("text/*");
                 intentToShare.putExtra(Intent.EXTRA_TEXT, "我正在使用TiTa听 " + share);
                 startActivity(Intent.createChooser(intentToShare, "分享你正在听的歌曲"));
                 break;
+            //点击列表
+            case R.id.bnLrcList:
+                showListDialog();
+                break;
         }
         intent.putExtra("progress", seekBarTime.getProgress());
         sendBroadcast(intent);
     }
 
+    private void showListDialog() {
+        AlertDialog.Builder builder;
+        final AlertDialog alertDialog ;
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.dialog_lrc_list, (ViewGroup) findViewById(R.id.lrcDialogLayout));
+
+        final ListView listDialog = (ListView) layout.findViewById(R.id.lrcListView);
+
+
+        MyBaseAdapter adapter = Utils.getAdapter();
+        listDialog.setAdapter(adapter);
+
+        builder = new AlertDialog.Builder(this);
+        builder.setView(layout);
+
+        alertDialog = builder.create();
+        alertDialog.show();
+
+        Window dialoWindow = alertDialog.getWindow();
+//        dialoWindow.setGravity(Gravity.right);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.width = 450;//定义宽度
+        lp.height = 590;//定义高度
+        lp.alpha = (float) 0.8;
+        lp.x = 180;
+        lp.y = 310;
+        alertDialog.getWindow().setAttributes(lp);
+
+        listDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(Utils.ACTION_TO_MUSICSERVICE);
+                //判断点击的项是不是当前正在播放的音乐
+                if (Utils.getCurrentSong() == i) {
+                    intent.putExtra("buttonChoose", Utils.BN_PLAY);
+                    sendBroadcast(intent);
+                } else {
+                    Utils.setCurrentSong(i);
+                    intent.putExtra("buttonChoose", Utils.ITEM);
+                    sendBroadcast(intent);
+                }
+                alertDialog.dismiss();
+            }
+        });
+        Utils.getAdapter().setSelectItem(Utils.getCurrentSong());
+        if (Utils.getCurrentSong() < 3||Utils.getCurrentSong()>Utils.getList().size()-2)
+            listDialog.setSelection(Utils.getCurrentSong());
+        else listDialog.setSelection(Utils.getCurrentSong()-2);
+
+    }
+
     //处理从Service传来的广播
     public class ServiceReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -411,9 +475,9 @@ public class TiTa extends Activity implements View.OnClickListener {
     /**
      * 将歌曲文件读取进来并进行处理
      */
-    public void searchLrc(String title){
+    public void searchLrc(String title) {
         //歌词路径
-        String lrcPath = path + File.separator+title +  ".lrc";
+        String lrcPath = path + File.separator + title + ".lrc";
         lyricProcess.readLRC(lrcPath);
         lyricView.setBlLrc(lyricProcess.getBlLrc());
         List<LyricObject> list = lyricProcess.getLrcList();
@@ -422,19 +486,19 @@ public class TiTa extends Activity implements View.OnClickListener {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public Drawable searchPicture(String title){
-            String picturePath = path +File.separator+ title +  ".jpg";
-            processPicture.readPciture(picturePath);
-            bitmap = processPicture.getBitmap();
-            if(bitmap!=null) {
-                Drawable drawable = new BitmapDrawable(bitmap);
-                return drawable;
-            }
+    public Drawable searchPicture(String title) {
+        String picturePath = path + File.separator + title + ".jpg";
+        processPicture.readPciture(picturePath);
+        bitmap = processPicture.getBitmap();
+        if (bitmap != null) {
+            Drawable drawable = new BitmapDrawable(bitmap);
+            return drawable;
+        }
         return null;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void changeBackground(String title){
+    public void changeBackground(String title) {
         //执行换肤
         Drawable drawable = Utils.getDrawableBackground(TiTa.this);
         Drawable artistBitmap = searchPicture(title);

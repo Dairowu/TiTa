@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,6 +61,7 @@ public class ChangeBackgroungActivity extends Activity implements View.OnClickLi
                 startActivity(intentToMain);
                 break;
 
+            //点击恢复默认
             case R.id.bnBackgroundDefault:
                 Resources r = getResources();
                 Uri uri =  Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
@@ -73,6 +73,7 @@ public class ChangeBackgroungActivity extends Activity implements View.OnClickLi
                 Toast.makeText(ChangeBackgroungActivity.this,"恢复默认成功",Toast.LENGTH_SHORT).show();
                 break;
 
+            //点击启动系统的Galley并且获取一张图片返回
             case R.id.bnSetBackground:
                 Intent intentGetUri = new Intent(Intent.ACTION_PICK);
                 intentGetUri.setType("image/*");
@@ -81,15 +82,14 @@ public class ChangeBackgroungActivity extends Activity implements View.OnClickLi
         }
     }
 
+    //处理返回的图片
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 0 && resultCode == -1) {
             Uri uri = data.getData();
-            Log.e("获取的Uri", " " + uri);
             backgroundNow.setImageURI(uri);
-            Log.e("ChangeBackground", uri.getPath());
 
             Drawable d = null;
             try {
