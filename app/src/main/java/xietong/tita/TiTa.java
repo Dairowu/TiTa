@@ -438,13 +438,10 @@ public class TiTa extends Activity implements View.OnClickListener {
         //执行换肤
         Drawable drawable = Utils.getDrawableBackground(TiTa.this);
         Drawable artistBitmap = searchPicture(title);
-//        Log.i("info","artistBitmap"+artistBitmap.toString());
         if (artistBitmap!=null){
             layoutThis.setBackground(artistBitmap);
-            Log.i("info", "artistBitmap"+title);
         }
         else  {
-            Log.i("info","drawable"+title);
             layoutThis.setBackground(drawable);
         }
     }
