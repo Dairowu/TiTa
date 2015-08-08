@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import guide.GuideActivity;
+import guide.ActivityGuide;
 
 /**
  * Created by acer-PC on 2015/8/6.
@@ -41,7 +41,7 @@ public class ActivityStart extends Activity {
     };
 
     private void goGuide(){
-        Intent intent = new Intent(ActivityStart.this, GuideActivity.class);
+        Intent intent = new Intent(ActivityStart.this, ActivityGuide.class);
         startActivity(intent);
         finish();
     }
