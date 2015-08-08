@@ -5,10 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +32,10 @@ import downloadmp3.DownloadMp3;
  * Created by acer-PC on 2015/8/2.
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    public static final int DIALOG_DISMISS = 0;// 对话框消失
+    public static final int DIALOG_MENU_INFO = 1;// 歌曲详情对话框
+    public static final int DIALOG_DELETE = 2;// 歌曲删除对话框
 
     DrawerLayout drawerLayout;
     //定义中间四个按钮
@@ -147,11 +149,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bnLike.setOnClickListener(this);
         bndownLoad.setOnClickListener(this);
 
-        Cursor cursor;
-        cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                null, null, null, MediaStore.Audio.AudioColumns.TITLE);
-        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, cursor);
-        Utils.setAdapter(baseAdapter);
+//        Cursor cursor;
+//        cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+//                null, null, null, MediaStore.Audio.AudioColumns.TITLE);
+//        MyBaseAdapter baseAdapter = new MyBaseAdapter(MainActivity.this, cursor);
+//        Utils.setAdapter(baseAdapter);
 
         //表示从Service接受到的Broadcast将在ServiceReciver处理
         receiver = new ListServiceReceiver();

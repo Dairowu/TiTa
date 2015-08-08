@@ -10,5 +10,15 @@
 
         
     </style>
+    <style name="TVAnimDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="TVAnimDialogWindowAnim" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_tv_on</item>
+        <item name="android:windowExitAnimation">@anim/dialog_tv_off</item>
+    </style>
 
 </resources>

@@ -15,5 +15,9 @@
     <color name="bn_user_log_notpress">#506cffe2</color>
     <color name="bn_user_set_press">#504bcc3f</color>
     <color name="bn_user_set_notpress">#50ff4ed8</color>
+    <color name="dialog_text">#FF404040</color>
+    <color name="dialog_btn">#FF8D8D8D</color>
+    <color name="dialog_title">#FF000000</color>
+    <color name="dialog_divider">#FF4DB6FF</color>
 
 </resources>

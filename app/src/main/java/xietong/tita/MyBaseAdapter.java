@@ -19,13 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Dialog.InfoDialog;
+import Dialog.TVAnimDialog;
+import SQLite.MusicDBHelper;
 import constant.DbFinal;
+import info.MusicInfo;
 
 /**
  * Created by acer-PC on 2015/8/3.
  * revised by CJJ on 2015/8/4.
  */
 public class MyBaseAdapter extends BaseAdapter {
+    public static final int DIALOG_DISMISS = 0;// 对话框消失
     // 上下文
     private Context context;
     // 数据源
@@ -35,12 +40,14 @@ public class MyBaseAdapter extends BaseAdapter {
     // 正在播放的歌曲位置
     private int selectItem = -1;
     private List<Map<String, Object>> songLists;
+    ArrayList<MusicInfo> songInfo;
 //     List<Map<String, Object>> songLists, Utils.getList()
 
     public MyBaseAdapter(Context context, Cursor cursor) {
         this.context = context;
         this.songLists = songLists;
         this.cursor = cursor;
+        songInfo = MusicDBHelper.getMusicListFromLocal(cursor);
         if (cursor != null) {
             popCheckStatus = new ArrayList<Boolean>();
             for (int i = 0; i < cursor.getCount(); i++) {
@@ -52,11 +59,11 @@ public class MyBaseAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub\
-        if (cursor.equals(null)){
+        if (cursor.equals(null)) {
             return 0;
         }
         return
-        cursor.getCount();
+                cursor.getCount();
     }
 
     @Override
@@ -72,7 +79,7 @@ public class MyBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
 
         final ViewHolder holder;
@@ -118,11 +125,11 @@ public class MyBaseAdapter extends BaseAdapter {
                 .getColumnIndex(DbFinal.LOCAL_ARTIST)));
         holder.popdown.setVisibility(View.GONE);
 
-        if (popCheckStatus.get(position)) {
-            holder.popdown.setVisibility(View.VISIBLE);
-        } else {
-            holder.popdown.setVisibility(View.GONE);
-        }
+//        if (popCheckStatus.get(position)) {
+//            holder.popdown.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.popdown.setVisibility(View.GONE);
+//        }
         holder.popCheck.setTag(position);
         holder.favor.setTag(position);
         holder.detail.setTag(position);
@@ -151,7 +158,7 @@ public class MyBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Log.e("favor", "click");
-//                Toast.makeText(context, "我喜欢", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "我喜欢", Toast.LENGTH_LONG).show();
             }
         });
         // 设置歌曲信息按钮点击事件
@@ -159,29 +166,47 @@ public class MyBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Log.e("detail", "click");
-//                int p = (Integer) v.getTag();
-//                MusicDBHelper helper = new MusicDBHelper(context, DbFinal.DB_NAME, null, DbFinal.DB_VERSION);
-//                ArrayList<MusicInfo> musicList = helper
-//                        .getMusicListFromLocal(cursor);
-//                MusicInfo m = musicList.get(p);
-//                String title = m.getTitle();
-//                String artist = m.getArtist();
-//                String album = m.getAlbum();
-//                String size = m.getSize() / 1024.0f / 1024.0f + "";
-//                size = size.substring(0, 3) + "M";
-//                String duration = m.getDuration() / 1000.0f / 60.0f + "";
-//                duration = duration.substring(0, 4) + "分";
-//                String path = m.getPath();
-//                ToastShow.toastShow(context, "歌曲名称：" + title + "\n歌手：" + artist
-//                        + "\n专辑：" + album + "\n歌曲大小：" + size + "\n歌曲时长："
-//                        + duration + "\n文件路径：" + path);
+//                cursor.moveToPosition(position);
+                InfoDialog infoDialog = new InfoDialog(v.getContext());
+                infoDialog.setOnTVAnimDialogDismissListener(new TVAnimDialog.OnTVAnimDialogDismissListener() {
+                    @Override
+                    public void onDismiss(int dialogId) {
+
+                    }
+                });
+
+                infoDialog.show();
+                infoDialog.setInfo(songInfo,position);
+
+//                String title = songInfo.get(position).getTitle();
+//                String artist = songInfo.get(position).getArtist();
+//                String album = songInfo.get(position).getAlbum();
+//                String size = songInfo.get(position).getSize();
+////                size = size.substring(0, 1) + "." + size.substring(2,3) + "M";
+////                size = size.substring(0, 3) + "M";
+//                String duration = songInfo.get(position).getDuration() + "";
+//                duration = Utils.millsToMinute(duration);
+//                String path = songInfo.get(position).getPath() + "";
+//
+//                Log.e("MyBaseAdapter", title);
+//                Log.e("artist", artist);
+//                Log.e("album", album);
+//                Log.e("size", size + "");
+//                Log.e("duration", duration);
+//                Log.e("path", path);
+////
+
+
+
+
+
             }
         });
         // 设置删除按钮点击事件
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("delete","click");
+                Log.e("delete", "click");
 //                Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
             }
         });

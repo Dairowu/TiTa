@@ -92,6 +92,22 @@ public class Utils {
             return minute + ":0" + second;
     }
 
+    /**
+     * 歌曲信息的转化为“--：--”时钟格式的方法
+     * @param duration
+     * @return
+     */
+    public static String millsToMinute(String duration) {
+        int minute = 0;
+        int second = 0;
+        second = Integer.parseInt(duration) / 1000;
+        minute = second / 60;
+        second %= 60;
+        if (second > 9)
+            return minute + ":" + second;
+        else
+            return minute + ":0" + second;
+    }
     //用来设置seekBar的最大值
     public static int seekbarMax() {
         int mill = 0;
